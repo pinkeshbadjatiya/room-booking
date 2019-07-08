@@ -23,7 +23,8 @@ public class AppConfig {
        public DriverManagerDataSource getDataSource() {
               DriverManagerDataSource ds = new DriverManagerDataSource();
               ds.setDriverClassName("com.mysql.jdbc.Driver");
-              ds.setUrl("jdbc:mysql://localhost:3306/bootcamp");
+              ds.setUrl("jdbc:mysql://localhost:3306/room_booking");
+              System.out.println("DRIVER>>>>>");
               ds.setUsername("root");
               ds.setPassword("123456789");
               return ds;
