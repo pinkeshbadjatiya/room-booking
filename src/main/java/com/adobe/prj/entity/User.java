@@ -16,19 +16,19 @@ public class User {
 	private String email;
 	
 	@Column(name="name")
-	private String Name;
+	private String name;
 	
 	@Column(name="password")
-	private String Password;
+	private String password;
 
 	@Column(name="role")
-	private String Role;
+	private String role;
 
 	@Column(name="phone")
-	private String Phone;
+	private String phone;
 
 	@Column(name="status")
-	private String Status;
+	private String status;
 
 	@Column(name="registration_date")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -52,43 +52,43 @@ public class User {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		name = name;
 	}
 
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 	public void setPassword(String password) {
-		Password = password;
+		password = password;
 	}
 
 	public String getRole() {
-		return Role;
+		return role;
 	}
 
 	public void setRole(String role) {
-		Role = role;
+		role = role;
 	}
 
 	public String getPhone() {
-		return Phone;
+		return phone;
 	}
 
 	public void setPhone(String phone) {
-		Phone = phone;
+		phone = phone;
 	}
 
 	public String getStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(String status) {
-		Status = status;
+		status = status;
 	}
 
 	

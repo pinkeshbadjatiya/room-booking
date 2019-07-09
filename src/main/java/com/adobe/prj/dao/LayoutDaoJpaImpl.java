@@ -9,54 +9,52 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+import com.adobe.prj.entity.Layout;
 import com.adobe.prj.entity.Product;
 import com.adobe.prj.entity.User;
 
 @Repository		// All 'Dao' classes should have repository
-public class UserDaoJpaImpl implements UserDao {
+public class LayoutDaoJpaImpl implements LayoutDao {
 
 	
 	@PersistenceContext
 	private EntityManager em;
 	
 	@Override
-	public User getUser(String email) {
+	public Layout getLayout(int id) {
 		// Limitation of find is that it can only find based on the primary key
 		// 'find' basically looks at the annotations @Table and @Id to generate the SQL
-		return em.find(User.class, email);
+		return em.find(Layout.class, id);
 	}
 
 	@Override
-	public List<User> getUsers() {
-		String JPQL = "SELECT u FROM User u";
-		TypedQuery<User> query = em.createQuery(JPQL, User.class);
+	public List<Layout> getLayouts() {
+		String JPQL = "SELECT l FROM Layout l";
+		TypedQuery<Layout> query = em.createQuery(JPQL, Layout.class);
 		return query.getResultList();
 	}
 
 	@Override
 	@Transactional
-	public void updateUser(User u) {
-		User _u = em.find(User.class, u.getEmail());
-		_u.setEmail(u.getEmail());
-		_u.setName(u.getName());
-		_u.setPassword(u.getPassword());
-		_u.setPhone(u.getPhone());
-		_u.setRole(u.getRole());
-		_u.setStatus(u.getStatus());
-		em.persist(_u);
+	public void updateLayout(Layout l) {
+		Layout _l = em.find(Layout.class, l.getId());
+		_l.setImage(l.getImage());
+		_l.setTitle(l.getTitle());
+		em.persist(_l);
 	}
 
 	@Override
 	@Transactional
-	public void deleteUser(User u) {
-		User _u = em.find(User.class, u.getEmail());
-		em.remove(_u);
+	public void deleteLayout(Layout l) {
+		Layout _l = em.find(Layout.class, l.getId());
+		em.remove(_l);
 	}
 
 	@Override
 	@Transactional		// Ensures the whole function gets executed in an atomic fashion. If not, then it rollsback the whole operation.
-	public void addUser(User u) {
-		em.persist(u);
+	public void addLayout(Layout l) {
+		System.out.println(l);
+		em.persist(l);
 	}
 
 
