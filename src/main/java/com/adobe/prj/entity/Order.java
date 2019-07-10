@@ -39,7 +39,7 @@ public class Order {
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="oid")
-	private List<Item> items = new ArrayList<Item>();
+	private List<Item> items;// = new ArrayList<Item>();
 	
 	
 	public int getOid() {

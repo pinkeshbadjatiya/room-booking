@@ -38,6 +38,7 @@ public class EquipmentDaoJpaImpl implements EquipmentDao {
 		// _l.setTitle(l.getTitle());
 		_e.setTitle(e.getTitle());
 		em.persist(_e);
+		System.out.println(_e);
 
 	}
 

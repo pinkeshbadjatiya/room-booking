@@ -5,6 +5,13 @@
   <version>1.1.0</version>
   <packaging>war</packaging>
   <url>http://maven.apache.org</url>
+  
+<!--    <parent>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-starter-parent</artifactId>
+     <version>1.4.2.RELEASE</version>
+     <relativePath/>
+   </parent> -->
     <properties>
         <!-- Generic properties -->
         <java.version>1.8</java.version>
@@ -12,7 +19,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Spring --> <!-- 3.2.3.RELEASE -->
-        <spring-framework.version>4.1.4.RELEASE</spring-framework.version>
+        <spring-framework.version>4.2.4.RELEASE</spring-framework.version>
         <org.springframework.security.version>3.2.4.RELEASE</org.springframework.security.version>
 
         <!-- Logging -->
@@ -29,6 +36,8 @@
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.17</maven-surefire-plugin.version>
 
+	    <spring-security.version>5.0.6.RELEASE</spring-security.version>
+	    <spring.version>5.0.6.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -44,19 +53,19 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>4.1.4.RELEASE</version>
+            <version>4.2.4.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>4.1.4.RELEASE</version>
+            <version>4.2.4.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>4.1.4.RELEASE</version>
+            <version>4.2.4.RELEASE</version>
         </dependency>
 
         
@@ -66,6 +75,54 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+        
+        
+        <!-- spring security -->
+<!-- 		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		    <version>${spring-security.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-web</artifactId>
+		    <version>${spring-security.version}</version>
+		</dependency>
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-security</artifactId>
+	    </dependency>
+	     -->
+
+<!--         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency> -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+		<!-- <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-security</artifactId>
+		    <version>1.5.21.RELEASE</version>
+		</dependency> -->
+
+
+        <!-- Spring boot dependencies -->
+<!--         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency> -->
+
+        <!-- Other dependencies -->
+        <!-- <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax-validation.version}</version>
+        </dependency> -->
+        
 
         <!-- Jackson JSON Processor -->
         <dependency>
