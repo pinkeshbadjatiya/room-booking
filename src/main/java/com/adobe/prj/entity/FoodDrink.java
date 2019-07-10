@@ -23,6 +23,22 @@ public class FoodDrink {
 	@Column(name = "price_type")
 	private String price_type;
 
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public String getPrice_type() {
+		return price_type;
+	}
+
+	public void setPrice_type(String price_type) {
+		this.price_type = price_type;
+	}
+
 	public int getId() {
 		return id;
 	}
