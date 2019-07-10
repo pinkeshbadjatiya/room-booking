@@ -6,52 +6,52 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-import com.adobe.prj.entity.Equipment;
+import com.adobe.prj.entity.FoodDrink;
 
 @Repository // All 'Dao' classes should have repository
-public class EquipmentDaoJpaImpl implements EquipmentDao {
+public class FoodDrinkDaoJpaImpl implements FoodDrinkDao {
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Override
-	public Equipment getEquipment(int id) {
+	public FoodDrink getFoodDrink(int id) {
 		// Limitation of find is that it can only find based on the primary key
 		// 'find' basically looks at the annotations @Table and @Id to generate
 		// the SQL
-		return em.find(Equipment.class, id);
+		return em.find(FoodDrink.class, id);
 	}
 
 	@Override
-	public List<Equipment> getEquipments() {
-		String JPQL = "SELECT e FROM Equipment e";
-		TypedQuery<Equipment> query = em.createQuery(JPQL, Equipment.class);
+	public List<FoodDrink> getFoodDrinks() {
+		String JPQL = "SELECT fd FROM FoodDrink fd";
+		TypedQuery<FoodDrink> query = em.createQuery(JPQL, FoodDrink.class);
 		return query.getResultList();
 	}
 
 	@Override
 	@Transactional
-	public void updateEquipment(Equipment e) {
+	public void updateFoodDrink(FoodDrink fd) {
 
-		Equipment _e = em.find(Equipment.class, e.getId());
+		FoodDrink _fd = em.find(FoodDrink.class, fd.getId());
 		// _l.setImage(l.getImage());
 		// _l.setTitle(l.getTitle());
-		_e.setTitle(e.getTitle());
-		em.persist(_e);
+		_fd.setTitle(fd.getTitle());
+		em.persist(_fd);
 
 	}
 
 	@Override
 	@Transactional
-	public void deleteEquipment(Equipment e) {
-		Equipment _e = em.find(Equipment.class, e.getId());
-		em.remove(_e);
+	public void deleteFoodDrink(FoodDrink fd) {
+		FoodDrink _fd = em.find(FoodDrink.class, fd.getId());
+		em.remove(_fd);
 	}
 
 	@Override
 	@Transactional // Ensures the whole function gets executed in an atomic fashion. If not, then it rollsback the whole operation.
-	public void addEquipment(Equipment e) {
-		em.persist(e);
+	public void addFoodDrink(FoodDrink fd) {
+		em.persist(fd);
 	}
 
 }
