@@ -30,7 +30,7 @@ public class FoodDrinkService {
 ////		order.setTotal(total);
 //		// We made changes to the Product class and still we are not explicitly pushing the changes to the backend,
 //		// BECAUSE, the Spring framework maintains dirty checking and ensures syncing of the objects to
-//		// to the DB AUTOMAGICALLY!!
+//		// to the DB AUTOMATICALLY!!
 //	}
 	
 	
