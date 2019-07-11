@@ -39,8 +39,11 @@ public class EquipmentDaoJpaImpl implements EquipmentDao {
 		_e.setTitle(e.getTitle());
 		em.persist(_e);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 		System.out.println(_e);
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 	}
