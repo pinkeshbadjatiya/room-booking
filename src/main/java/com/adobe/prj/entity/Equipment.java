@@ -64,44 +64,5 @@ public class Equipment {
 	public Equipment() {
 		super();
 	}
-<<<<<<< Updated upstream
-=======
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public String getPrice_type() {
-		return price_type;
-	}
-
-	public void setPrice_type(String price_type) {
-		this.price_type = price_type;
-	}
-
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public String getPrice_type() {
-		return price_type;
-	}
-
-	public void setPrice_type(String price_type) {
-		this.price_type = price_type;
-	}
-
->>>>>>> Stashed changes
-	
 }
