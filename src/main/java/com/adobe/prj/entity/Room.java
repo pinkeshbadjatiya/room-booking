@@ -16,6 +16,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name="rooms")
 public class Room {
@@ -40,14 +43,17 @@ public class Room {
 	private String Status;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@Column(name="book_types")
 	private List<String> bookTypes = new ArrayList<String>();
 	
 	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@Column(name="book_type_price")
 	private List<Double> bookTypesPrice = new ArrayList<Double>();
 	
 	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@JoinTable(name="room_layout",
 	joinColumns = @JoinColumn(name = "room_id"),
 	inverseJoinColumns = @JoinColumn(name = "layout_id"))
