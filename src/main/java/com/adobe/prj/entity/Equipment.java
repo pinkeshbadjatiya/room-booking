@@ -64,5 +64,5 @@ public class Equipment {
 	public Equipment() {
 		super();
 	}
-	
+
 }
