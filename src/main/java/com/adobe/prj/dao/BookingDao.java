@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.adobe.prj.entity.Booking;
 
+//interface for booking data access operations
 public interface BookingDao {
 
 	List<Booking> getBookings();
@@ -12,7 +13,6 @@ public interface BookingDao {
 	void addBooking(Booking b);
 	void updateBooking(Booking b);
 	void deleteBooking(Booking b);
-	List<Integer> getAvailability(int roomId, Date startDate,Date endDate);
-	public List<Booking> getBookRoom(int roomId, Date bookingDate);
+	List<Integer> getRoomAvailability(int roomId, Date startDate,Date endDate);
 	Booking getPrice(int id);
 }

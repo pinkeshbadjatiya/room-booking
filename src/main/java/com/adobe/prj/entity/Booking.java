@@ -22,6 +22,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+//class for booking entity
 @Entity
 @Table(name="bookings")
 public class Booking {
@@ -52,12 +53,14 @@ public class Booking {
 	@Column(name="duration")
 	private String duration;
 	
+	//stores a boolean to indicate if booking is confirmed by user
 	@Column(name="confirm_booking")
 	private boolean confirmBooking;
 	
 	@Column(name="status")
 	private Status status;
 	
+	//store list of hours indicating booked slots for meeting
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@Column(name="hour_list")
@@ -79,11 +82,13 @@ public class Booking {
 	@Column(name="deposit")
 	private double deposit;
 	
+	//list of equipments booked for the meeting
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@JoinColumn(name="booking_id")
 	private List<EquipmentOrder> equipmentOrders = new ArrayList<EquipmentOrder>();
 	
+	//list of food and drinks booked for the meeting
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@JoinColumn(name="booking_id")

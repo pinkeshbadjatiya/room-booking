@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.entity.Booking;
 
+//service class for booking entity
 @Service
 public class BookingService {
 
@@ -41,12 +42,8 @@ public class BookingService {
 		bookingDao.updateBooking(b);
 	}
 	
-	public List<Integer> getAvailability(int roomId,Date startDate,Date endDate){
-		return bookingDao.getAvailability(roomId,startDate,endDate);
-	}
-	
-	public List<Booking> getBookRoom(int roomId,Date bookingDate){
-		return bookingDao.getBookRoom(roomId,bookingDate);
+	public List<Integer> getRoomAvailability(int roomId,Date startDate,Date endDate){
+		return bookingDao.getRoomAvailability(roomId,startDate,endDate);
 	}
 	
 	public Booking getPrice(int id) {
