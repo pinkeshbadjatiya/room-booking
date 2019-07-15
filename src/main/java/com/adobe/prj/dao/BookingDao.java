@@ -13,6 +13,6 @@ public interface BookingDao {
 	void addBooking(Booking b);
 	void updateBooking(Booking b);
 	void deleteBooking(Booking b);
-	List<Integer> getRoomAvailability(int roomId, Date startDate,Date endDate);
+	List<Integer> getRoomAvailability(int roomId, Date startDate, Date endDate);
 	Booking getPrice(int id);
 }

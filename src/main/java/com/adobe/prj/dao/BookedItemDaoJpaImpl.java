@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import com.adobe.prj.entity.BookedItem;
 import com.adobe.prj.entity.BookedItem.BookedItemId;
+import com.adobe.prj.exceptions.InvalidId;
+import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 
 @Repository // All 'Dao' classes should have repository
 public class BookedItemDaoJpaImpl implements BookedItemDao {
@@ -20,7 +22,11 @@ public class BookedItemDaoJpaImpl implements BookedItemDao {
 		// Limitation of find is that it can only find based on the primary key
 		// 'find' basically looks at the annotations @Table and @Id to generate
 		// the SQL
-		return em.find(BookedItem.class, id);
+		BookedItem ans = em.find(BookedItem.class, id);
+		if (ans == null) {
+			throw new InvalidParameterOrMissingValue("No item with the given id found.");
+		}
+		return ans;
 	}
 
 	@Override
@@ -28,10 +34,10 @@ public class BookedItemDaoJpaImpl implements BookedItemDao {
 	public void updateBookedItem(BookedItem bi) {
 		BookedItem _bi = em.find(BookedItem.class, bi.getId());
 
-		// ?????
-		_bi.setId(_bi.getId());
-		// ????
-
+		if (_bi == null) {
+			throw new InvalidParameterOrMissingValue("No item with the given id found. So, updation not possible.");
+		} else
+			_bi.setId(_bi.getId());
 		em.persist(_bi);
 	}
 
@@ -39,7 +45,10 @@ public class BookedItemDaoJpaImpl implements BookedItemDao {
 	@Transactional
 	public void deleteBookedItem(BookedItem bi) {
 		BookedItem _bi = em.find(BookedItem.class, bi.getId());
-		em.remove(_bi);
+		if (_bi == null) {
+			throw new InvalidParameterOrMissingValue("No such item found to be deleted.");
+		} else
+			em.remove(_bi);
 	}
 
 	@Override
@@ -58,22 +67,23 @@ public class BookedItemDaoJpaImpl implements BookedItemDao {
 		query.setParameter("booked_item", booked_item);
 		BookedItem booked_item1 = query.getResultList().get(0);
 		if (booked_item1 == null) {
-			// TODO : error, invalid id for item.
+			throw new InvalidId("No item found. Please check the Id given for the item.");
 		}
 
 		// Query query = em.createQuery(JPQL1).setParameter("roomId", roomId);
 		// List<Integer> entry = query.getResultList();
 
-		int countsofar = 0;
-		for (int i = booked_qty.get(0); i <= booked_qty.get(1); i++) {
-			countsofar += booked_item1.getBooked_qty().get(i);
+		else {
+			int countsofar = 0;
+			for (int i = booked_qty.get(0); i <= booked_qty.get(1); i++) {
+				countsofar += booked_item1.getBooked_qty().get(i);
+			}
+
+			if (countsofar > 10)
+				return false;
+
+			return true;
 		}
-		
-		if (countsofar > 10)
-			return false;
-
-		return true;
-
 	}
 
 	// public List<List<Integer>> getAvailability(int roomId) {
@@ -98,11 +108,15 @@ public class BookedItemDaoJpaImpl implements BookedItemDao {
 		BookedItem booked_item = em.find(BookedItem.class, booked_item_id);
 
 		List<Integer> quantities = booked_item.getBooked_qty();
-		for (int i = duration.get(0); i <= duration.get(1); i++) {
-			quantities.set(i, quantities.get(i)+1);
-		}
-		booked_item.setBooked_qty(quantities);
-		em.persist(booked_item);
+		if (quantities.size() == 0) {
+			throw new InvalidParameterOrMissingValue("No item with the given id found. So, updation not possible.");
+		} 
+			for (int i = duration.get(0); i <= duration.get(1); i++) {
+				quantities.set(i, quantities.get(i) + 1);
+			}
+			booked_item.setBooked_qty(quantities);
+			em.persist(booked_item);
+		
 	}
 
 }

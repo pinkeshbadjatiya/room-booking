@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.UserDao;
 import com.adobe.prj.entity.User;
+import com.adobe.prj.exceptions.InvalidId;
+import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 import com.adobe.prj.utils.AuthRoles;
 
 @Service
@@ -18,20 +20,21 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 
+	
 	public User getUserByEmail(String email) {
 		System.out.println(email);
 		return userDao.getUserByEmail(email);
 	}
-	
+
 	public User getUserByAPIKey(String api_key) {
 		System.out.println(api_key);
 		return userDao.getUserByAPIKey(api_key);
 	}
-	
+
 	public List<User> getUsers() {
 		return userDao.getUsers();
 	}
-	
+
 	public Boolean isValidUser(User u) {
 		System.out.println(u);
 		User ref_user = userDao.getUserByEmail(u.getEmail());
@@ -44,12 +47,12 @@ public class UserService {
 		}
 		return true;
 	}
-	
+
 	@Transactional
 	public void addUser(User u) {
 		userDao.addUser(u);
 	}
-	
+
 	@Transactional
 	public void deleteUser(User u) {
 		userDao.deleteUser(u);
@@ -64,23 +67,25 @@ public class UserService {
 		String api_key = request.getHeader("API-KEY");
 		if (api_key == null) {
 			// TODO: Error, No API key
+			throw new InvalidId("Invalid Id for the item. Please supply a valid Id.");
 		}
 		User user = userDao.getUserByAPIKey(api_key);
 		return user;
 	}
-	
 
 	public User authenticateUserByAPIKeyAndRole(HttpServletRequest request, AuthRoles roles) {
 		System.out.println("inside-auth");
 		String api_key = request.getHeader("API-KEY");
 		if (api_key == null) {
 			// TODO: Error, No API key
+			throw new InvalidId("Invalid Id for the item. Please supply a valid Id.");
 		}
 		User user = userDao.getUserByAPIKey(api_key);
 		System.out.println(user);
 		if (!roles.isAuthorized(user.getRole()) && !roles.isAuthorized("*")) {
 			System.out.println("Not allowed");
 			// TODO: Error, Not allowed
+			throw new InvalidParameterOrMissingValue("Not allowed");
 		}
 		return user;
 	}

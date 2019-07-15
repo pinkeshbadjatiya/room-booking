@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.adobe.prj.entity.BookedItem.BookedItemId;
+
 @Entity
 @Table(name = "booked_items")
 public class BookedItem {

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adobe.prj.entity.BookedItem.BookedItemId;
 import com.adobe.prj.entity.Booking;
+import com.adobe.prj.service.BookedItemService;
 import com.adobe.prj.service.BookingService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.utils.AuthRoles;
@@ -25,6 +27,8 @@ public class BookingController {
 
 	@Autowired
 	private BookingService bookingService;
+	@Autowired
+	private BookedItemService bookedItemService;
 	
 	@Autowired
 	private UserService userService;
@@ -64,17 +68,21 @@ public class BookingController {
 		return new ResponseEntity<>(b, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="bookings/roomAvailability", method=RequestMethod.GET)
-	public @ResponseBody List<Integer> getRoomAvailability(HttpServletRequest request,@RequestBody Booking b) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
-		return bookingService.getRoomAvailability(b.getRoom().getId(),b.getStartDate(),b.getEndDate());
+	@RequestMapping(value="bookings/getRoomAvailability", method=RequestMethod.GET)
+	public @ResponseBody List<Integer> getRoomAvailability(HttpServletRequest request, @RequestBody Booking b) {
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin", "user"}));
+		return bookingService.getRoomAvailability(b.getRoom().getId(), b.getStartDate(), b.getEndDate());
 	}
+
+	@RequestMapping(value = "bookings/getItemAvailability", method = RequestMethod.GET)
+	public @ResponseBody Boolean getItemAvailability(@RequestBody BookedItemId bitem, List<Integer> booked_duration) {
+		return bookedItemService.getItemAvailability(bitem, booked_duration);
+	}	
 	
 	@RequestMapping(value="bookings/computePrice/{id}", method=RequestMethod.GET)
 	public @ResponseBody Booking getPrice(HttpServletRequest request,@PathVariable("id") int id) {
 		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
 		return bookingService.getPrice(id);
 	}
-	
-	
+
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.EquipmentOrder;
 import com.adobe.prj.entity.FoodDrinkOrder;
+import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 
 //implementation of BookingDao interface
 @Repository
@@ -40,12 +41,21 @@ public class BookingDaoJpaImpl implements BookingDao {
 	public List<Booking> getBookings() {
 		String JPQL = "SELECT b FROM Booking b where b.confirmBooking=TRUE";
 		TypedQuery<Booking> query = em.createQuery(JPQL, Booking.class);
+		if (query == null) {
+			throw new InvalidParameterOrMissingValue("No bookings found.");
+		}
 		return query.getResultList();
+
 	}
 
 	//returns a particular booking based on id
 	@Override
 	public Booking getBooking(int id) {
+		Booking ans = em.find(Booking.class, id);
+
+		if (ans == null) {
+			throw new InvalidParameterOrMissingValue("No booking with the given id found.");
+		}
 		return em.find(Booking.class, id);
 	}
 
@@ -127,9 +137,11 @@ public class BookingDaoJpaImpl implements BookingDao {
 		if (b.getHourList().size() != 0) {
 			_b.setHourList(b.getHourList());
 		}
+
 		if(b.isConfirmBooking()) {
 			_b.setConfirmBooking(true);
 		}
+
 		em.persist(_b);
 
 	}
@@ -139,7 +151,10 @@ public class BookingDaoJpaImpl implements BookingDao {
 	@Transactional
 	public void deleteBooking(Booking b) {
 		Booking _b = em.find(Booking.class, b.getId());
-		em.remove(_b);
+		if (_b == null) {
+			throw new InvalidParameterOrMissingValue("No such booking found to be deleted.");
+		} else
+			em.remove(_b);
 	}
 
 	//returns the availability of a room on a particular date or range of dates
@@ -184,6 +199,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 			return ans;
 		}
 	}
+
 
 	//returns bookings containing a particular start date irrespective of duration of booking
 	public List<Booking> findBookingsContainingDateForMultipleDaysBooking(int roomId, Date startDate) {

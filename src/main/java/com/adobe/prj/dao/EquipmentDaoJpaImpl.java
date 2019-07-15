@@ -6,7 +6,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+
+import com.adobe.prj.entity.BookedItem;
 import com.adobe.prj.entity.Equipment;
+import com.adobe.prj.exceptions.InvalidId;
+import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 
 @Repository // All 'Dao' classes should have repository
 public class EquipmentDaoJpaImpl implements EquipmentDao {
@@ -19,13 +23,21 @@ public class EquipmentDaoJpaImpl implements EquipmentDao {
 		// Limitation of find is that it can only find based on the primary key
 		// 'find' basically looks at the annotations @Table and @Id to generate
 		// the SQL
-		return em.find(Equipment.class, id);
+		Equipment ans = em.find(Equipment.class, id);
+		if (ans == null) {
+			throw new InvalidParameterOrMissingValue("No equipment with the given id found.");
+		}
+		return ans;
 	}
 
 	@Override
 	public List<Equipment> getEquipments() {
 		String JPQL = "SELECT e FROM Equipment e";
 		TypedQuery<Equipment> query = em.createQuery(JPQL, Equipment.class);
+		if (query == null) {
+			// TODO : error, invalid id for item.
+			throw new InvalidId("No equipment found. Please check the Id given for the equipment.");
+		}
 		return query.getResultList();
 	}
 
@@ -36,6 +48,9 @@ public class EquipmentDaoJpaImpl implements EquipmentDao {
 		Equipment _e = em.find(Equipment.class, e.getId());
 		// _l.setImage(l.getImage());
 		// _l.setTitle(l.getTitle());
+		if (_e == null) {
+			throw new InvalidParameterOrMissingValue("No equipment with the given id found. So, updation not possible.");
+		}
 		_e.setTitle(e.getTitle());
 		em.persist(_e);
 	}
@@ -44,11 +59,15 @@ public class EquipmentDaoJpaImpl implements EquipmentDao {
 	@Transactional
 	public void deleteEquipment(Equipment e) {
 		Equipment _e = em.find(Equipment.class, e.getId());
+		if (_e == null) {
+			throw new InvalidParameterOrMissingValue("No equipment with the given id found. So, deletion not possible.");
+		}
 		em.remove(_e);
 	}
 
 	@Override
-	@Transactional // Ensures the whole function gets executed in an atomic fashion. If not, then it rollsback the whole operation.
+	@Transactional // Ensures the whole function gets executed in an atomic
+					// fashion. If not, then it rollsback the whole operation.
 	public void addEquipment(Equipment e) {
 		em.persist(e);
 	}

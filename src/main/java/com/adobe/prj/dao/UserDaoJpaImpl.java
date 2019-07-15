@@ -14,17 +14,23 @@ import com.adobe.prj.entity.User;
 import com.adobe.prj.exceptions.InvalidAPIKey;
 import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 
-@Repository		// All 'Dao' classes should have repository
+@Repository // All 'Dao' classes should have repository
 public class UserDaoJpaImpl implements UserDao {
 
-	
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Override
 	public User getUserByEmail(String email) {
 		// Limitation of find is that it can only find based on the primary key
-		// 'find' basically looks at the annotations @Table and @Id to generate the SQL
+		// 'find' basically looks at the annotations @Table and @Id to generate
+		// the SQL
+
+		User ans = em.find(User.class, email);
+		if (ans == null) {
+			throw new InvalidParameterOrMissingValue("No user with the given email found.");
+		}
+
 		return em.find(User.class, email);
 	}
 
@@ -39,11 +45,14 @@ public class UserDaoJpaImpl implements UserDao {
 		}
 		return query_result.get(0).getUser();
 	}
-	
+
 	@Override
 	public List<User> getUsers() {
 		String JPQL = "SELECT u FROM User u";
 		TypedQuery<User> query = em.createQuery(JPQL, User.class);
+		if (query == null) {
+			throw new InvalidParameterOrMissingValue("No user found.");
+		}
 		return query.getResultList();
 	}
 
@@ -51,6 +60,9 @@ public class UserDaoJpaImpl implements UserDao {
 	@Transactional
 	public void updateUser(User u) {
 		User _u = em.find(User.class, u.getEmail());
+		if (_u == null) {
+			throw new InvalidParameterOrMissingValue("No user with the given id found. Hence, updation not possible.");
+		}
 		_u.setEmail(u.getEmail());
 		_u.setName(u.getName());
 		_u.setPassword(u.getPassword());
@@ -65,16 +77,16 @@ public class UserDaoJpaImpl implements UserDao {
 	public void deleteUser(User u) {
 		User _u = em.find(User.class, u.getEmail());
 		if (_u == null) {
-			throw new InvalidParameterOrMissingValue("Invalid Parameter or Missing Value.");
+			throw new InvalidParameterOrMissingValue("No user with the given id found. Hence, deletion not possible.");
 		}
 		em.remove(_u);
 	}
 
 	@Override
-	@Transactional		// Ensures the whole function gets executed in an atomic fashion. If not, then it rollsback the whole operation.
+	@Transactional // Ensures the whole function gets executed in an atomic
+					// fashion. If not, then it rollsback the whole operation.
 	public void addUser(User u) {
 		em.persist(u);
 	}
-
 
 }

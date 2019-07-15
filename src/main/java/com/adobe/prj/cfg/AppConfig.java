@@ -26,7 +26,7 @@ public class AppConfig {
               ds.setUrl("jdbc:mysql://localhost:3306/room_booking");
               System.out.println("DRIVER>>>>>");
               ds.setUsername("root");
-              ds.setPassword("123456789");
+              ds.setPassword("Nidhi@138");
               return ds;
        }
       

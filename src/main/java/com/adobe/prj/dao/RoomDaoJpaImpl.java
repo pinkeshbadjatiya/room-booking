@@ -1,6 +1,5 @@
 package com.adobe.prj.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,7 +9,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.adobe.prj.entity.Layout;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 
@@ -19,7 +17,6 @@ public class RoomDaoJpaImpl implements RoomDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	
 	
 	@Override
     @Transactional
@@ -32,6 +29,9 @@ public class RoomDaoJpaImpl implements RoomDao {
 	public List<Room> getRooms() {
 		String JPQL = "SELECT r FROM Room r";
 		TypedQuery<Room> query = em.createQuery(JPQL, Room.class);
+		if (query == null) {
+			throw new InvalidParameterOrMissingValue("No rooms found.");
+		}
 		return query.getResultList();
 	}
 
@@ -48,6 +48,11 @@ public class RoomDaoJpaImpl implements RoomDao {
 	@Transactional
 	public void updateRoom(Room r) {
 		Room _r = em.find(Room.class, r.getId());
+		
+		if (_r == null) {
+			throw new InvalidParameterOrMissingValue("No room with the given id found. Hence, updation not possible.");
+		}
+		
 		_r.setId(r.getId());
 		_r.setBookTypes(r.getBookTypes());
 		_r.setCapacity(r.getCapacity());
@@ -66,6 +71,9 @@ public class RoomDaoJpaImpl implements RoomDao {
 	@Transactional
 	public void deleteRoom(Room r) {
 		Room _r = em.find(Room.class, r.getId());
+		if (r == null) {
+			throw new InvalidParameterOrMissingValue("No room with the given id found. Hence, deletion not possible.");
+		}
 		em.remove(_r);
 	}
 
