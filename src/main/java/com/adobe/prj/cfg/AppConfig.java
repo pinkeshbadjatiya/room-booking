@@ -26,7 +26,7 @@ public class AppConfig {
               ds.setUrl("jdbc:mysql://localhost:3306/room_booking");
               System.out.println("DRIVER>>>>>");
               ds.setUsername("root");
-              ds.setPassword("Nidhi@138");
+              ds.setPassword("123456789");
               return ds;
        }
       
@@ -48,5 +48,10 @@ public class AppConfig {
        public PlatformTransactionManager getTransaction() {
               return new JpaTransactionManager();
        }
+       
+//       @Bean
+//       public WebSecurityConfig getWebSecurityConfig() {
+//    	   return new WebSecurityConfig();
+//       }
  
 }

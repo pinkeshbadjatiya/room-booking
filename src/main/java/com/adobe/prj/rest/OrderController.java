@@ -19,15 +19,13 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
-	
-	
-	@RequestMapping(value="orders", method=RequestMethod.GET)
+
+	@RequestMapping(value = "orders", method = RequestMethod.GET)
 	public @ResponseBody List<Order> getOrders() {
 		return orderService.getOrders();
 	}
-	
-	
-	@RequestMapping(value="orders", method=RequestMethod.POST)
+
+	@RequestMapping(value = "orders", method = RequestMethod.POST)
 	public ResponseEntity<Order> addOrder(@RequestBody Order o) {
 		orderService.manageOrder(o);
 		return new ResponseEntity<>(o, HttpStatus.CREATED);

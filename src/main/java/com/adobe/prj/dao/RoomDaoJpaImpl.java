@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.adobe.prj.entity.Layout;
 import com.adobe.prj.entity.Room;
+import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 
 @Repository
 public class RoomDaoJpaImpl implements RoomDao {
@@ -36,7 +37,11 @@ public class RoomDaoJpaImpl implements RoomDao {
 
 	@Override
 	public Room getRoom(int id) {
-		return em.find(Room.class, id);
+		Room room = em.find(Room.class, id);
+		if (room == null) {
+			throw new InvalidParameterOrMissingValue("Invalid Parameter or Missing Value.");
+		}
+		return room;
 	}
 
 	@Override

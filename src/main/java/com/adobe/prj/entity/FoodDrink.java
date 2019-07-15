@@ -65,21 +65,5 @@ public class FoodDrink {
 		super();
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public String getPrice_type() {
-		return price_type;
-	}
-
-	public void setPrice_type(String price_type) {
-		this.price_type = price_type;
-	}
-
 	
 }

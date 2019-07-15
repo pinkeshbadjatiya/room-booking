@@ -1,7 +1,9 @@
 package com.adobe.prj.service;
 
+import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import com.adobe.prj.entity.Item;
 import com.adobe.prj.entity.Order;
 import com.adobe.prj.entity.Product;
 import com.adobe.prj.entity.User;
+import com.adobe.prj.utils.AuthRoles;
 
 @Service
 public class UserService {
@@ -41,13 +44,31 @@ public class UserService {
 //	}
 	
 	
-	public User getUser(String email) {
+	public User getUserByEmail(String email) {
 		System.out.println(email);
-		return userDao.getUser(email);
+		return userDao.getUserByEmail(email);
 	}
-
+	
+	public User getUserByAPIKey(String api_key) {
+		System.out.println(api_key);
+		return userDao.getUserByAPIKey(api_key);
+	}
+	
 	public List<User> getUsers() {
 		return userDao.getUsers();
+	}
+	
+	public Boolean isValidUser(User u) {
+		System.out.println(u);
+		User ref_user = userDao.getUserByEmail(u.getEmail());
+		if (ref_user == null) {
+			System.out.println("NULL USER");
+			return false;
+		}
+		if (ref_user.getPassword() != u.getPassword()) {
+			return false;
+		}
+		return true;
 	}
 	
 	@Transactional
@@ -63,5 +84,30 @@ public class UserService {
 	@Transactional
 	public void updateUser(User u) {
 		userDao.updateUser(u);
+	}
+
+	public User authenticateUserByAPIKey(HttpServletRequest request) {
+		String api_key = request.getHeader("API-KEY");
+		if (api_key == null) {
+			// TODO: Error, No API key
+		}
+		User user = userDao.getUserByAPIKey(api_key);
+		return user;
+	}
+	
+
+	public User authenticateUserByAPIKeyAndRole(HttpServletRequest request, AuthRoles roles) {
+		System.out.println("inside-auth");
+		String api_key = request.getHeader("API-KEY");
+		if (api_key == null) {
+			// TODO: Error, No API key
+		}
+		User user = userDao.getUserByAPIKey(api_key);
+		System.out.println(user);
+		if (!roles.isAuthorized(user.getRole()) && !roles.isAuthorized("*")) {
+			System.out.println("Not allowed");
+			// TODO: Error, Not allowed
+		}
+		return user;
 	}
 }

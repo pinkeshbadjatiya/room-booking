@@ -9,7 +9,8 @@ public interface UserDao {
 //	List<Product> getProducts();
 //	Product getProduct(int id);
 	List<User> getUsers();
-	User getUser(String email);
+	User getUserByEmail(String email);
+	User getUserByAPIKey(String api_key);
 	void addUser(User u);
 	void updateUser(User u);
 	void deleteUser(User u);
