@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.User;
 import com.adobe.prj.exceptions.InvalidAPIKey;
+import com.adobe.prj.exceptions.NotAuthorized;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.utils.AuthRoles;  
   
@@ -40,7 +41,9 @@ public class UserController {
 	
 	@RequestMapping(value="users/{email:.+}", method=RequestMethod.GET)
 	public @ResponseBody User getUser(HttpServletRequest request, @PathVariable("email") String email) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
+		User user = userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin", "user"}));		// Authenticates the user based on the API-KEY
+		if (user.getEmail() != email && user.getRole() != "admin")
+			throw new NotAuthorized("You are not authorized to access this value.");
 		return userService.getUserByEmail(email);
 	}
 	

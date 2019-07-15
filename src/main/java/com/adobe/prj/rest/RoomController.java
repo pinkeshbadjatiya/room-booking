@@ -44,21 +44,21 @@ public class RoomController {
 	
 	@RequestMapping(value="rooms", method=RequestMethod.POST)
 	public ResponseEntity<Room> addRoom(HttpServletRequest request, @RequestBody Room r) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY		
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY		
 		roomService.addRoom(r);
 		return new ResponseEntity<>(r, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value="rooms", method=RequestMethod.PUT)
 	public ResponseEntity<Room> updateRoom(HttpServletRequest request, @RequestBody Room r) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY		
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY		
 		roomService.updateRoom(r);
 		return new ResponseEntity<>(r, HttpStatus.ACCEPTED);
 	}
 	
 	@RequestMapping(value="rooms", method=RequestMethod.DELETE)
 	public ResponseEntity<Room> deleteRoom(HttpServletRequest request, @RequestBody Room r) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY		
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY		
 		roomService.deleteRoom(r);
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}

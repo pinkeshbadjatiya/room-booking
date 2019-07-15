@@ -8,15 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.LayoutDao;
-import com.adobe.prj.dao.OrderDao;
-import com.adobe.prj.dao.ProductDao;
-import com.adobe.prj.dao.UserDao;
-import com.adobe.prj.entity.Customer;
-import com.adobe.prj.entity.Item;
 import com.adobe.prj.entity.Layout;
-import com.adobe.prj.entity.Order;
-import com.adobe.prj.entity.Product;
-import com.adobe.prj.entity.User;
 
 @Service
 public class LayoutService {

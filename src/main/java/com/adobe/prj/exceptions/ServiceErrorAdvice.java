@@ -29,12 +29,6 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler{
 		obj.put("status", new Integer(status.toString()));
     	return obj.toString();
     }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler({SQLException.class, NullPointerException.class})
-    public ResponseEntity<String> handle1(Exception e) {
-    	return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({InvalidAPIKey.class})
@@ -42,8 +36,20 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler{
     	return new ResponseEntity<>(generateJSON(InvalidAPIKey.message, e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
     
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({NotAuthorized.class})
+    public ResponseEntity<String> handle3(Exception e) {
+    	return new ResponseEntity<>(generateJSON(NotAuthorized.message, e.getMessage(), HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
+    }
+    
 //    protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
 //        String error = "Invalid API Key";
 //        return handleExceptionInternal(ex, generateJSON(error, HttpStatus.BAD_REQUEST), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 //    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({Exception.class, SQLException.class, NullPointerException.class})
+    public ResponseEntity<String> handle1(Exception e) {
+    	return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+    }    
 }

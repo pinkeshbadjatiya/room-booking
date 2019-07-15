@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.adobe.prj.entity.Product;
 import com.adobe.prj.entity.Token;
 import com.adobe.prj.entity.User;
 import com.adobe.prj.exceptions.InvalidAPIKey;

@@ -42,21 +42,21 @@ public class FoodDrinkController {
 	
 	@RequestMapping(value="fooddrinks", method=RequestMethod.POST)
 	public ResponseEntity<FoodDrink> addFoodDrink(HttpServletRequest request, @RequestBody FoodDrink fd) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		foodDrinkService.addFoodDrink(fd);
 		return new ResponseEntity<>(fd, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value="fooddrinks", method=RequestMethod.PUT)
 	public ResponseEntity<FoodDrink> updateFoodDrink(HttpServletRequest request, @RequestBody FoodDrink fd) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		foodDrinkService.updateFoodDrink(fd);
 		return new ResponseEntity<>(fd, HttpStatus.ACCEPTED);
 	}
 	
 	@RequestMapping(value="fooddrinks", method=RequestMethod.DELETE)
 	public ResponseEntity<FoodDrink> deleteFoodDrink(HttpServletRequest request, @RequestBody FoodDrink fd) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		foodDrinkService.deleteFoodDrink(fd);
 		return new ResponseEntity<>(fd, HttpStatus.OK);
 	}

@@ -10,8 +10,6 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.adobe.prj.entity.Layout;
-import com.adobe.prj.entity.Product;
-import com.adobe.prj.entity.User;
 
 @Repository		// All 'Dao' classes should have repository
 public class LayoutDaoJpaImpl implements LayoutDao {

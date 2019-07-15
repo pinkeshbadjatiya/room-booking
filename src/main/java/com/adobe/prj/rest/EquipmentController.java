@@ -44,21 +44,21 @@ public class EquipmentController {
 	
 	@RequestMapping(value="equipments", method=RequestMethod.POST)
 	public ResponseEntity<Equipment> addEquipment(HttpServletRequest request, @RequestBody Equipment e) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		equipmentService.addEquipment(e);
 		return new ResponseEntity<>(e, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value="equipments", method=RequestMethod.PUT)
 	public ResponseEntity<Equipment> updateEquipment(HttpServletRequest request, @RequestBody Equipment e) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		equipmentService.updateEquipment(e);
 		return new ResponseEntity<>(e, HttpStatus.ACCEPTED);
 	}
 	
 	@RequestMapping(value="equipments", method=RequestMethod.DELETE)
 	public ResponseEntity<Equipment> deleteEquipment(HttpServletRequest request, @RequestBody Equipment e) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		equipmentService.deleteEquipment(e);
 		return new ResponseEntity<>(e, HttpStatus.OK);
 	}

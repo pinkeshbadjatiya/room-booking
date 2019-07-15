@@ -44,21 +44,21 @@ public class LayoutController {
 	
 	@RequestMapping(value="layouts", method=RequestMethod.POST)
 	public ResponseEntity<Layout> addLayout(HttpServletRequest request, @RequestBody Layout l) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		layoutService.addLayout(l);
 		return new ResponseEntity<>(l, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value="layouts", method=RequestMethod.PUT)
 	public ResponseEntity<Layout> updateUser(HttpServletRequest request, @RequestBody Layout l) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		layoutService.updateLayout(l);
 		return new ResponseEntity<>(l, HttpStatus.ACCEPTED);
 	}
 	
 	@RequestMapping(value="layouts", method=RequestMethod.DELETE)
 	public ResponseEntity<Layout> deleteLayout(HttpServletRequest request, @RequestBody Layout l) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"user", "admin"}));		// Authenticates the user based on the API-KEY
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
 		layoutService.deleteLayout(l);
 		return new ResponseEntity<>(l, HttpStatus.OK);
 	}
