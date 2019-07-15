@@ -53,13 +53,13 @@ public class BookingController {
 	}
 	
 	@RequestMapping(value="bookings/roomAvailability", method=RequestMethod.GET)
-	public @ResponseBody List<Integer> getAvailability(@RequestBody Room r) {
-		return bookingService.getAvailability(r.getId());
+	public @ResponseBody List<Integer> getAvailability(@RequestBody Booking b) {
+		return bookingService.getAvailability(b.getRoom().getId(),b.getStartDate(),b.getEndDate());
 	}
 	
 	@RequestMapping(value="bookings/room/specific", method=RequestMethod.GET)
-	public @ResponseBody List<Booking> getBookRoom(@RequestBody Room r) {
-		return bookingService.getBookRoom(r.getId());
+	public @ResponseBody List<Booking> getBookRoom(@RequestBody Booking b) {
+		return bookingService.getBookRoom(b.getRoom().getId(),b.getStartDate());
 	}
 	
 	@RequestMapping(value="bookings/computePrice/{id}", method=RequestMethod.GET)

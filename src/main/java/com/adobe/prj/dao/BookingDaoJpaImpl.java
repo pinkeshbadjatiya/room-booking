@@ -1,6 +1,7 @@
 package com.adobe.prj.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -130,23 +131,48 @@ public class BookingDaoJpaImpl implements BookingDao {
 	}
 
 	@Override
-	public List<Booking> getBookRoom(int roomId){
-		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId";
-		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId);
+	public List<Integer> getAvailability(int roomId,Date startDate,Date endDate) {
+		if(multipleDayAvailability(roomId, startDate).size()!=0) {
+			List<Integer> ans = new ArrayList<>();
+			for(int i=0;i<15;i++) {
+				ans.add(1);
+			}
+			return ans;
+		}
+		if(endDate==null||startDate.equals(endDate)) {
+			return getAvailabilityUtil(roomId, startDate);
+		}else {
+			List<Integer> ans = new ArrayList<>();
+			if(multipleDayAvailability(roomId, endDate).size()!=0) {
+				for(int i=0;i<15;i++) {
+					ans.add(1);
+				}
+			}else {
+				for(int i=0;i<15;i++) {
+					ans.add(0);
+				}
+			}
+			return ans;
+		}
+	}
+	
+	public List<Booking> multipleDayAvailability(int roomId,Date startDate){
+		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.duration='multiple days' and :startDate BETWEEN b.startDate and b.endDate";
+		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId).setParameter("startDate", startDate);
 		return query.getResultList();
 	}
-	@Override
-	public List<Integer> getAvailability(int roomId) {
+	
+	public List<Integer> getAvailabilityUtil(int roomId,Date bookingDate){
 		List<List<Integer>> hourLists = new ArrayList<List<Integer>>();
 		List<Integer> ans = new ArrayList<>();
-	List<Booking> bookRows = getBookRoom(roomId);
+	List<Booking> bookRows = getBookRoom(roomId,bookingDate);
 	for(Booking b:bookRows) {
 		int bookId = b.getId();
 		String JPQL2 = "SELECT l FROM Booking b JOIN b.hourList l where b.id=:bookId";
 		Query query2 = em.createQuery(JPQL2).setParameter("bookId", bookId);
 		List<Integer> hrList = query2.getResultList();
 			hourLists.add(hrList);
-	}
+	   }
 		for(List<Integer> hList:hourLists) {
 			for(int i=0;i<hList.size();i++) {
 				if(hList.get(i)==1) {
@@ -159,8 +185,15 @@ public class BookingDaoJpaImpl implements BookingDao {
 					ans.add(i, 0);
 				}
 			}
-	}
+	    }
 		return ans;
+	}
+	
+	@Override
+	public List<Booking> getBookRoom(int roomId,Date bookingDate){
+		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.startDate=:bookingDate";
+		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId).setParameter("bookingDate", bookingDate);
+		return query.getResultList();
 	}
 
 

@@ -1,5 +1,6 @@
 package com.adobe.prj.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -40,12 +41,12 @@ public class BookingService {
 		bookingDao.updateBooking(b);
 	}
 	
-	public List<Integer> getAvailability(int roomId){
-		return bookingDao.getAvailability(roomId);
+	public List<Integer> getAvailability(int roomId,Date startDate,Date endDate){
+		return bookingDao.getAvailability(roomId,startDate,endDate);
 	}
 	
-	public List<Booking> getBookRoom(int roomId){
-		return bookingDao.getBookRoom(roomId);
+	public List<Booking> getBookRoom(int roomId,Date bookingDate){
+		return bookingDao.getBookRoom(roomId,bookingDate);
 	}
 	
 	public Booking getPrice(int id) {
