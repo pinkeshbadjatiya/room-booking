@@ -1,3 +1,7 @@
 create database room_booking;
 INSERT INTO users values('a@b.com', 'A', '123456789', '9999988888', 'admin', 'active', '2019-06-28 12:23:20');
-INSERT INTO layouts VALUES (0, 'image-url', 'layout1');
+INSERT INTO layouts VALUES (1, 'image-url1', 'layout1');
+INSERT INTO layouts VALUES (2, 'image-url2', 'layout2');
+INSERT INTO rooms VALUES(1, 'active', 100, 'room-description-bla-bla-bla', 'room-image1', 'room-title1');
+INSERT INTO room_layout VALUES(1,1);
+INSERT INTO room_layout VALUES(1,2);
