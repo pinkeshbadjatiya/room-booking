@@ -66,8 +66,7 @@ public class UserService {
 	public User authenticateUserByAPIKey(HttpServletRequest request) {
 		String api_key = request.getHeader("API-KEY");
 		if (api_key == null) {
-			// TODO: Error, No API key
-			throw new InvalidId("Invalid Id for the item. Please supply a valid Id.");
+			throw new InvalidId("Invalid API-KEY. Please supply a valid Id.");
 		}
 		User user = userDao.getUserByAPIKey(api_key);
 		return user;
@@ -78,8 +77,7 @@ public class UserService {
 		String api_key = request.getHeader("API-KEY");
 		System.out.println(api_key);
 		if (api_key == null) {
-			// TODO: Error, No API key
-			throw new InvalidId("Invalid Id for the item. Please supply a valid Id.");
+			throw new InvalidId("Invalid API-KEY. Please supply a valid Id.");
 		}
 		User user = userDao.getUserByAPIKey(api_key);
 		System.out.println(user);

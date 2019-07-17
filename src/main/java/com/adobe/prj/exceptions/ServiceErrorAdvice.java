@@ -2,6 +2,7 @@ package com.adobe.prj.exceptions;
 
 import java.sql.SQLException;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,13 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(generateJSON(InvalidId.message, e.getMessage(), HttpStatus.BAD_REQUEST),
 				HttpStatus.BAD_REQUEST);
 	}
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler({ ConstraintViolationException.class, SQLException.class })
+	public ResponseEntity<String> handle4(Exception e) {
+		return new ResponseEntity<>(generateJSON(InvalidDeletion.message, e.getMessage(), HttpStatus.BAD_REQUEST),
+				HttpStatus.BAD_REQUEST);
+	}
 
 	// protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest
 	// request) {
@@ -51,7 +59,7 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 	// }
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler({ Exception.class, SQLException.class, NullPointerException.class })
+	@ExceptionHandler({ Exception.class, NullPointerException.class })
 	public ResponseEntity<String> handle_generic(Exception e) {
 		return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later", e.getMessage(),
 				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
