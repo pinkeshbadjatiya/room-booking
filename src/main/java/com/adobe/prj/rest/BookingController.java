@@ -70,7 +70,7 @@ public class BookingController {
 		return new ResponseEntity<>(b, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="bookings/getRoomAvailability", method=RequestMethod.GET)
+	@RequestMapping(value="bookings/getRoomAvailability", method=RequestMethod.POST)
 	public @ResponseBody List<Integer> getRoomAvailability(HttpServletRequest request, @RequestBody Booking b) {
 		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin", "user"}));
 		return bookingService.getRoomAvailability(b.getRoom().getId(), b.getStartDate(), b.getEndDate());

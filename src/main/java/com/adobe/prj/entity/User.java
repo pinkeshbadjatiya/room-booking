@@ -9,6 +9,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name="users")
 public class User {
@@ -17,6 +20,7 @@ public class User {
 	
 	@Column(name="name")
 	private String name;
+	
 	
 	@Column(name="password")
 	private String password;
@@ -59,10 +63,12 @@ public class User {
 		name = name;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		password = password;
 	}

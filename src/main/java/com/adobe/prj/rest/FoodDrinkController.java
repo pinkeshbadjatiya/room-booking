@@ -56,9 +56,10 @@ public class FoodDrinkController {
 		return new ResponseEntity<>(fd, HttpStatus.ACCEPTED);
 	}
 	
-	@RequestMapping(value="fooddrinks", method=RequestMethod.DELETE)
-	public ResponseEntity<FoodDrink> deleteFoodDrink(HttpServletRequest request, @RequestBody FoodDrink fd) {
+	@RequestMapping(value="fooddrinks/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<FoodDrink> deleteFoodDrink(HttpServletRequest request, @PathVariable("id") int id) {
 		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
+		FoodDrink fd = foodDrinkService.getFoodDrink(id);
 		foodDrinkService.deleteFoodDrink(fd);
 		return new ResponseEntity<>(fd, HttpStatus.OK);
 	}

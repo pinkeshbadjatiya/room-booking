@@ -20,8 +20,8 @@ public class FoodDrink {
 	@Column(name = "price")
 	private double price;
 	
-	@Column(name = "price_type")
-	private String price_type;
+	@Column(name = "editIt")
+	private Boolean editIt;
 
 	public double getPrice() {
 		return price;
@@ -31,22 +31,24 @@ public class FoodDrink {
 		this.price = price;
 	}
 
-	public String getPrice_type() {
-		return price_type;
+	public Boolean getEditIt() {
+		return editIt;
 	}
 
-	public void setPrice_type(String price_type) {
-		this.price_type = price_type;
+	public void setEditIt(Boolean editIt) {
+		this.editIt = editIt;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public FoodDrink(double price, String price_type) {
+	public FoodDrink(int id, String title, double price, Boolean editIt) {
 		super();
+		this.id = id;
+		this.title = title;
 		this.price = price;
-		this.price_type = price_type;
+		this.editIt = editIt;
 	}
 
 	public void setId(int id) {

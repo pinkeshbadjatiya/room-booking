@@ -58,9 +58,10 @@ public class RoomController {
 		return new ResponseEntity<>(r, HttpStatus.ACCEPTED);
 	}
 	
-	@RequestMapping(value="rooms", method=RequestMethod.DELETE)
-	public ResponseEntity<Room> deleteRoom(HttpServletRequest request, @RequestBody Room r) {
+	@RequestMapping(value="rooms/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Room> deleteRoom(HttpServletRequest request, @PathVariable("id") int id) {
 		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY		
+		Room r = roomService.getRoom(id);
 		roomService.deleteRoom(r);
 		return new ResponseEntity<>(r, HttpStatus.OK);
 	}

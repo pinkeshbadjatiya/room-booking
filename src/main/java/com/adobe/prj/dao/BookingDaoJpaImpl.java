@@ -40,6 +40,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 	@Override
 	public List<Booking> getBookings() {
 		String JPQL = "SELECT b FROM Booking b where b.confirmBooking=TRUE";
+		System.out.println("inside");
 		TypedQuery<Booking> query = em.createQuery(JPQL, Booking.class);
 		if (query == null) {
 			throw new InvalidParameterOrMissingValue("No bookings found.");
@@ -226,6 +227,12 @@ public class BookingDaoJpaImpl implements BookingDao {
 			Query query2 = em.createQuery(JPQL2).setParameter("bookId", bookId);
 			List<Integer> hrList = query2.getResultList();
 			hourLists.add(hrList);
+		}
+		for(int i=0;i<7;i++){
+			ans.add(i, 0);
+		}
+		for(int i=7;i<15;i++){
+			ans.add(i, 1);
 		}
 		for (List<Integer> hList : hourLists) {
 			for (int i = 0; i < hList.size(); i++) {

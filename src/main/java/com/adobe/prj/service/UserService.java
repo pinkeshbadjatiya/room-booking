@@ -76,6 +76,7 @@ public class UserService {
 	public User authenticateUserByAPIKeyAndRole(HttpServletRequest request, AuthRoles roles) {
 		System.out.println("inside-auth");
 		String api_key = request.getHeader("API-KEY");
+		System.out.println(api_key);
 		if (api_key == null) {
 			// TODO: Error, No API key
 			throw new InvalidId("Invalid Id for the item. Please supply a valid Id.");

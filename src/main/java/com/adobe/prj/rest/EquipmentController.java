@@ -56,9 +56,10 @@ public class EquipmentController {
 		return new ResponseEntity<>(e, HttpStatus.ACCEPTED);
 	}
 	
-	@RequestMapping(value="equipments", method=RequestMethod.DELETE)
-	public ResponseEntity<Equipment> deleteEquipment(HttpServletRequest request, @RequestBody Equipment e) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
+	@RequestMapping(value="equipments/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Equipment> deleteEquipment(HttpServletRequest request, @PathVariable("id") int id) {
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));	// Authenticates the user based on the API-KEY
+		Equipment e = equipmentService.getEquipment(id);
 		equipmentService.deleteEquipment(e);
 		return new ResponseEntity<>(e, HttpStatus.OK);
 	}

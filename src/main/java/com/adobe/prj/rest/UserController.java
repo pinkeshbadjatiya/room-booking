@@ -65,9 +65,10 @@ public class UserController {
 		return new ResponseEntity<>(u, HttpStatus.ACCEPTED);
 	}
 	
-	@RequestMapping(value="users", method=RequestMethod.DELETE)
-	public ResponseEntity<User> deleteUser(HttpServletRequest request, @RequestBody User u) {
+	@RequestMapping(value="users/{email:.+}", method=RequestMethod.DELETE)
+	public ResponseEntity<User> deleteUser(HttpServletRequest request, @PathVariable("email") String email) {
 		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
+		User u = userService.getUserByEmail(email);
 		userService.deleteUser(u);
 		return new ResponseEntity<>(u, HttpStatus.OK);
 	}

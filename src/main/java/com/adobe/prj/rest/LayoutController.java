@@ -58,9 +58,10 @@ public class LayoutController {
 		return new ResponseEntity<>(l, HttpStatus.ACCEPTED);
 	}
 	
-	@RequestMapping(value="layouts", method=RequestMethod.DELETE)
-	public ResponseEntity<Layout> deleteLayout(HttpServletRequest request, @RequestBody Layout l) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));		// Authenticates the user based on the API-KEY
+	@RequestMapping(value="layouts/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Layout> deleteLayout(HttpServletRequest request, @PathVariable("id") int id) {
+		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));	// Authenticates the user based on the API-KEY
+		Layout l = layoutService.getLayout(id);
 		layoutService.deleteLayout(l);
 		return new ResponseEntity<>(l, HttpStatus.OK);
 	}
