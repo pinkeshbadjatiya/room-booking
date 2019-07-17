@@ -60,6 +60,7 @@ public class Room {
 	private List<Layout> layoutList = new ArrayList<Layout>();
 	
 	@ElementCollection(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@Column(name="layout_id")
 	private List<Integer> layoutIds = new ArrayList<Integer>();
 	
@@ -125,6 +126,13 @@ public class Room {
 
 	public void setBookTypes(List<String> bookTypes) {
 		this.bookTypes = bookTypes;
+	}
+
+	@Override
+	public String toString() {
+		return "Room [id=" + id + ", title=" + title + ", image=" + image + ", capacity=" + capacity + ", description="
+				+ description + ", Status=" + Status + ", bookTypes=" + bookTypes + ", bookTypesPrice=" + bookTypesPrice
+				+ ", layoutList=" + layoutList + ", layoutIds=" + layoutIds + "]";
 	}
 
 	public List<Double> getBookTypesPrice() {

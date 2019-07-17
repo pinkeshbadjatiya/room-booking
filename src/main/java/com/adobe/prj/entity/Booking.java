@@ -32,11 +32,11 @@ public class Booking {
 	private int id;
 
 	@Column(name="start_date")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date startDate;
 	
 	@Column(name="end_date")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
 	@Column(name="attendees")

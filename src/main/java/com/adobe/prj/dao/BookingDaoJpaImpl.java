@@ -63,7 +63,6 @@ public class BookingDaoJpaImpl implements BookingDao {
 	@Override
 	public List<Booking> getBookings() {
 		String JPQL = "SELECT b FROM Booking b where b.confirmBooking=TRUE";
-		System.out.println("inside");
 		TypedQuery<Booking> query = em.createQuery(JPQL, Booking.class);
 		if (query == null) {
 			throw new InvalidParameterOrMissingValue("No bookings found.");
@@ -91,11 +90,8 @@ public class BookingDaoJpaImpl implements BookingDao {
 		if (b.getId() != 0) {
 			_b.setId(b.getId());
 		}
-//		System.out.println(b.getId());
-//		System.out.println(_b.getId());
-//		System.out.println(b.getAddress());
+
 		if (b.getAddress() != null) {
-		//	System.out.println("setting");
 			_b.setAddress(b.getAddress());
 		}
 		if (b.getAttendees() != 0) {
@@ -188,12 +184,16 @@ public class BookingDaoJpaImpl implements BookingDao {
 		// Check ROom
 		Room room = bk.getRoom();
 		if (room == null) throw new InvalidParameterOrMissingValue("No room specified");
+		System.out.println(room);
+		room = em.find(Room.class, room.getId());
+		System.out.println(room);
 
 		// CHeck layout
 		Layout layout = bk.getLayout();
 		if (layout == null) throw new InvalidParameterOrMissingValue("No layout specified");
 		
 		// Check Layout in Room
+		System.out.println(layout.getId());
 		if (!room.getLayoutIds().contains(layout.getId())) throw new InvalidParameterOrMissingValue("Invalid Layout for a Room");
 		
 		// Check sDate & eDate
@@ -203,7 +203,9 @@ public class BookingDaoJpaImpl implements BookingDao {
 		
 		// Check room availability
 		List<Integer> bookedHourList = bk.getHourList();
+		System.out.println(bookedHourList);
 		List<Integer> availableHourList = getRoomAvailability(room.getId(), sDate, eDate);
+		System.out.println(availableHourList);
 		for (int i=0; i<availableHourList.size(); i++)  {
 			if (bookedHourList.get(i) == 0 && availableHourList.get(i) == 0) throw new InvalidParameterOrMissingValue("Already Booked");
 		}
@@ -212,12 +214,12 @@ public class BookingDaoJpaImpl implements BookingDao {
 		///////////
 		
 		// Check Duration
-		HashSet hashSet = new HashSet<String>();
+		HashSet<String> hashSet = new HashSet<String>();
 		hashSet.add("full day");
 		hashSet.add("half day");
 		hashSet.add("multiple days");
 		hashSet.add("hour");
-		if (!hashSet.contains(bk.getDuration())) throw new InvalidParameterOrMissingValue("Invalid Duration");
+		if (!hashSet.contains(bk.getDuration().toLowerCase())) throw new InvalidParameterOrMissingValue("Invalid Duration");
 		
 	}
 	
@@ -236,6 +238,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 	//returns in the form of hour list
 	@Override
 	public List<Integer> getRoomAvailability(int roomId, Date startDate, Date endDate) {
+		System.out.println(startDate);
 		//checks if booking is for single day or multiple days
 		if (endDate == null || startDate.equals(endDate)) {
 
@@ -294,6 +297,9 @@ public class BookingDaoJpaImpl implements BookingDao {
 	private List<Integer> getRoomAvailabilityUtil(int roomId, Date bookingDate) {
 		List<List<Integer>> hourLists = new ArrayList<List<Integer>>();
 		List<Integer> ans = new ArrayList<>();
+		for(int i=0;i<15;i++) {
+			ans.add(i,1);
+		}
 		List<Booking> bookRows = getBookRoom(roomId, bookingDate);
 		for (Booking b : bookRows) {
 			int bookId = b.getId();
@@ -302,22 +308,10 @@ public class BookingDaoJpaImpl implements BookingDao {
 			List<Integer> hrList = query2.getResultList();
 			hourLists.add(hrList);
 		}
-		for(int i=0;i<7;i++){
-			ans.add(i, 0);
-		}
-		for(int i=7;i<15;i++){
-			ans.add(i, 1);
-		}
 		for (List<Integer> hList : hourLists) {
 			for (int i = 0; i < hList.size(); i++) {
 				if (hList.get(i) == 0) {
-					if (ans.size() < hList.size()) {
-						ans.add(i, 1);
-					} else {
-						ans.set(i, 1);
-					}
-				} else if (ans.size() < hList.size()) {
-					ans.add(i, 1);
+						ans.set(i, 0);
 				}
 			}
 		}

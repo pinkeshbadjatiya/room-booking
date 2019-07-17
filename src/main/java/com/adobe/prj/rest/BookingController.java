@@ -52,6 +52,9 @@ public class BookingController {
 	
 	@RequestMapping(value="bookings", method=RequestMethod.POST)
 	public ResponseEntity<Booking> addBooking(HttpServletRequest request,@RequestBody Booking b) {
+		System.out.println(">>>>>  My BOoking object");
+		System.out.println(b);
+		
 		User u = userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
 		bookingService.addBooking(b, u.getRole());
 		return new ResponseEntity<>(b, HttpStatus.CREATED);
@@ -59,6 +62,9 @@ public class BookingController {
 
 	@RequestMapping(value="bookings", method=RequestMethod.PUT)
 	public ResponseEntity<Booking> updateBooking(HttpServletRequest request,@RequestBody Booking b) {
+		System.out.println(">>>>>  My BOoking object: PUT");
+		System.out.println(b);
+		
 		User u = userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
 		bookingService.updateBooking(b, u.getRole());
 		return new ResponseEntity<>(b, HttpStatus.ACCEPTED);
