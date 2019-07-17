@@ -33,6 +33,20 @@ public class BookingDaoJpaImpl implements BookingDao {
 		if (b.getEndDate() == null) {
 			b.setEndDate(b.getStartDate());
 		}
+		if(b.getDuration().equalsIgnoreCase("full day") && b.getEndDate().equals(b.getStartDate())) {
+			List<Integer> ans = new ArrayList<>();
+			for(int i=0;i<15;i++) {
+				ans.add(i,0);
+			}
+			b.setHourList(ans);
+		}
+		if(b.getHourList().size()==0) {
+			List<Integer> ans = new ArrayList<>();
+			for(int i=0;i<15;i++) {
+				ans.add(i,1);
+			}
+			b.setHourList(ans);
+		}
 		em.persist(b);
 	}
 
@@ -204,14 +218,14 @@ public class BookingDaoJpaImpl implements BookingDao {
 
 	//returns bookings containing a particular start date irrespective of duration of booking
 	public List<Booking> findBookingsContainingDateForMultipleDaysBooking(int roomId, Date startDate) {
-		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and :startDate BETWEEN b.startDate and b.endDate";
+		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.confirmBooking=TRUE and :startDate BETWEEN b.startDate and b.endDate";
 		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId).setParameter("startDate", startDate);
 		return query.getResultList();
 	}
 
 	//returns bookings containing a particular start date only for multiple day bookings 
 	public List<Booking> findBookingsContainingDateForHourlyBooking(int roomId, Date startDate) {
-		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.duration='multiple days' and :startDate BETWEEN b.startDate and b.endDate";
+		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.confirmBooking=TRUE and b.duration='multiple days' and :startDate BETWEEN b.startDate and b.endDate";
 		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId).setParameter("startDate", startDate);
 		return query.getResultList();
 	}
@@ -236,14 +250,14 @@ public class BookingDaoJpaImpl implements BookingDao {
 		}
 		for (List<Integer> hList : hourLists) {
 			for (int i = 0; i < hList.size(); i++) {
-				if (hList.get(i) == 1) {
+				if (hList.get(i) == 0) {
 					if (ans.size() < hList.size()) {
 						ans.add(i, 1);
 					} else {
 						ans.set(i, 1);
 					}
 				} else if (ans.size() < hList.size()) {
-					ans.add(i, 0);
+					ans.add(i, 1);
 				}
 			}
 		}
@@ -252,7 +266,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 
 	//returns bookings corresponding to a particular room and date
 	public List<Booking> getBookRoom(int roomId, Date bookingDate) {
-		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.startDate=:bookingDate";
+		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.confirmBooking=TRUE and b.startDate=:bookingDate";
 		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId).setParameter("bookingDate", bookingDate);
 		return query.getResultList();
 	}
@@ -278,7 +292,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 			// em.persist(fo);
 			subTotal += fo.getAmount();
 		}
-		if (b.getDuration().equals("Hour")) {
+		if (b.getDuration().equalsIgnoreCase("Hour")) {
 			List<Integer> hourList = b.getHourList();
 			int totalHours = 0;
 			for (int hour : hourList) {
@@ -287,31 +301,40 @@ public class BookingDaoJpaImpl implements BookingDao {
 			double roomPrice = 0.00;
 			List<String> bookTypes = b.getRoom().getBookTypes();
 			for (int i = 0; i < bookTypes.size(); i++) {
-				if (bookTypes.get(i).equals("hour")) {
+				if (bookTypes.get(i).equalsIgnoreCase("hour")) {
 					roomPrice = b.getRoom().getBookTypesPrice().get(i);
 				}
 			}
 			subTotal += (totalHours * roomPrice);
-		} else if (b.getDuration().equals("Half-day")) {
+		} else if (b.getDuration().equalsIgnoreCase("Half day")) {
 			double roomPrice = 0.00;
 			List<String> bookTypes = b.getRoom().getBookTypes();
 			for (int i = 0; i < bookTypes.size(); i++) {
-				if (bookTypes.get(i).equals("Half-day")) {
+				if (bookTypes.get(i).equalsIgnoreCase("Half day")) {
 					roomPrice = b.getRoom().getBookTypesPrice().get(i);
 				}
 			}
 			subTotal += roomPrice;
-		} else if (b.getDuration().equals("Multiple days")) {
+		} else if (b.getDuration().equalsIgnoreCase("Multiple days")) {
 			double roomPrice = 0.00;
 			List<String> bookTypes = b.getRoom().getBookTypes();
 			for (int i = 0; i < bookTypes.size(); i++) {
-				if (bookTypes.get(i).equals("Multiple days")) {
+				if (bookTypes.get(i).equalsIgnoreCase("Multiple days")) {
 					roomPrice = b.getRoom().getBookTypesPrice().get(i);
 				}
 			}
 			long difference = b.getEndDate().getTime() - b.getStartDate().getTime();
 			int ans = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
 			subTotal += (roomPrice * ans);
+		}else if (b.getDuration().equalsIgnoreCase("Full day")) {
+			double roomPrice = 0.00;
+			List<String> bookTypes = b.getRoom().getBookTypes();
+			for (int i = 0; i < bookTypes.size(); i++) {
+				if (bookTypes.get(i).equalsIgnoreCase("Full day")) {
+					roomPrice = b.getRoom().getBookTypesPrice().get(i);
+				}
+			}
+			subTotal += roomPrice;
 		}
 		b.setSubTotal(subTotal);
 		double tax = 0.1 * subTotal;
