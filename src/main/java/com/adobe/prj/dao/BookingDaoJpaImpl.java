@@ -3,6 +3,7 @@ package com.adobe.prj.dao;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -15,9 +16,14 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.adobe.prj.entity.Booking;
+import com.adobe.prj.entity.BookingStatus;
 import com.adobe.prj.entity.EquipmentOrder;
 import com.adobe.prj.entity.FoodDrinkOrder;
+import com.adobe.prj.entity.Layout;
+import com.adobe.prj.entity.Room;
 import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
+import com.adobe.prj.exceptions.NotAuthorized;
+import com.adobe.prj.service.BookingService;
 
 //implementation of BookingDao interface
 @Repository
@@ -29,11 +35,11 @@ public class BookingDaoJpaImpl implements BookingDao {
 	//adds new booking
 	@Override
 	@Transactional
-	public void addBooking(Booking b) {
+	public void addBooking(Booking b, String role) {
 		if (b.getEndDate() == null) {
 			b.setEndDate(b.getStartDate());
 		}
-		if(b.getDuration().equalsIgnoreCase("full day") && b.getEndDate().equals(b.getStartDate())) {
+		if(b.getDuration()!=null && b.getDuration().equalsIgnoreCase("full day") && b.getEndDate().equals(b.getStartDate())) {
 			List<Integer> ans = new ArrayList<>();
 			for(int i=0;i<15;i++) {
 				ans.add(i,0);
@@ -47,6 +53,9 @@ public class BookingDaoJpaImpl implements BookingDao {
 			}
 			b.setHourList(ans);
 		}
+		
+		// Validate booking
+		if (b.isConfirmBooking()) validateBookingWithData(b, role);
 		em.persist(b);
 	}
 
@@ -77,7 +86,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 	//updates a particular booking after checking the updated fields
 	@Override
 	@Transactional
-	public void updateBooking(Booking b) {
+	public void updateBooking(Booking b, String role) {
 		Booking _b = em.find(Booking.class, b.getId());
 		if (b.getId() != 0) {
 			_b.setId(b.getId());
@@ -140,9 +149,15 @@ public class BookingDaoJpaImpl implements BookingDao {
 		if (b.getState() != null) {
 			_b.setState(b.getState());
 		}
+
 		if (b.getStatus() != null) {
+			if (role == "user") throw new NotAuthorized("Not authorized to set Status");
 			_b.setStatus(b.getStatus());
+		} else if (role == "user") {
+			_b.setStatus(BookingStatus.PENDING);
 		}
+		
+		
 		if (b.getTitle() != null) {
 			_b.setTitle(b.getTitle());
 		}
@@ -154,13 +169,58 @@ public class BookingDaoJpaImpl implements BookingDao {
 		}
 
 		if(b.isConfirmBooking()) {
+			validateBookingWithId(_b.getId(), role);
 			_b.setConfirmBooking(true);
 		}
 
 		em.persist(_b);
 
 	}
+	
+	
+	private void validateBookingWithId(int bookingId, String role) {
+		Booking bk = em.find(Booking.class, bookingId);
+		validateBookingWithData(bk, role);
+	}
 
+	
+	private void validateBookingWithData(Booking bk, String role) {
+		// Check ROom
+		Room room = bk.getRoom();
+		if (room == null) throw new InvalidParameterOrMissingValue("No room specified");
+
+		// CHeck layout
+		Layout layout = bk.getLayout();
+		if (layout == null) throw new InvalidParameterOrMissingValue("No layout specified");
+		
+		// Check Layout in Room
+		if (!room.getLayoutIds().contains(layout.getId())) throw new InvalidParameterOrMissingValue("Invalid Layout for a Room");
+		
+		// Check sDate & eDate
+		Date sDate = bk.getStartDate();
+		Date eDate = bk.getEndDate();
+		if (sDate == null) throw new InvalidParameterOrMissingValue("Invalid Start date");
+		
+		// Check room availability
+		List<Integer> bookedHourList = bk.getHourList();
+		List<Integer> availableHourList = getRoomAvailability(room.getId(), sDate, eDate);
+		for (int i=0; i<availableHourList.size(); i++)  {
+			if (bookedHourList.get(i) == 0 && availableHourList.get(i) == 0) throw new InvalidParameterOrMissingValue("Already Booked");
+		}
+		
+		// TODO: Equipment availability
+		///////////
+		
+		// Check Duration
+		HashSet hashSet = new HashSet<String>();
+		hashSet.add("full day");
+		hashSet.add("half day");
+		hashSet.add("multiple days");
+		hashSet.add("hour");
+		if (!hashSet.contains(bk.getDuration())) throw new InvalidParameterOrMissingValue("Invalid Duration");
+		
+	}
+	
 	//deletes a particular booking
 	@Override
 	@Transactional
@@ -217,21 +277,21 @@ public class BookingDaoJpaImpl implements BookingDao {
 
 
 	//returns bookings containing a particular start date irrespective of duration of booking
-	public List<Booking> findBookingsContainingDateForMultipleDaysBooking(int roomId, Date startDate) {
+	private List<Booking> findBookingsContainingDateForMultipleDaysBooking(int roomId, Date startDate) {
 		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.confirmBooking=TRUE and :startDate BETWEEN b.startDate and b.endDate";
 		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId).setParameter("startDate", startDate);
 		return query.getResultList();
 	}
 
 	//returns bookings containing a particular start date only for multiple day bookings 
-	public List<Booking> findBookingsContainingDateForHourlyBooking(int roomId, Date startDate) {
+	private List<Booking> findBookingsContainingDateForHourlyBooking(int roomId, Date startDate) {
 		String JPQL1 = "SELECT b FROM Booking b JOIN b.room r where r.id=:roomId and b.confirmBooking=TRUE and b.duration='multiple days' and :startDate BETWEEN b.startDate and b.endDate";
 		Query query = em.createQuery(JPQL1).setParameter("roomId", roomId).setParameter("startDate", startDate);
 		return query.getResultList();
 	}
 
 	//returns list of hours available for a particular room on a particular date
-	public List<Integer> getRoomAvailabilityUtil(int roomId, Date bookingDate) {
+	private List<Integer> getRoomAvailabilityUtil(int roomId, Date bookingDate) {
 		List<List<Integer>> hourLists = new ArrayList<List<Integer>>();
 		List<Integer> ans = new ArrayList<>();
 		List<Booking> bookRows = getBookRoom(roomId, bookingDate);

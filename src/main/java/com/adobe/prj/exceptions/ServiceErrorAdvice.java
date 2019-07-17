@@ -61,7 +61,7 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ Exception.class, NullPointerException.class })
 	public ResponseEntity<String> handle_generic(Exception e) {
-		return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later", e.getMessage(),
+		return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later"+e.getMessage(), e.getMessage(),
 				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

@@ -58,7 +58,7 @@ public class Booking {
 	private boolean confirmBooking;
 	
 	@Column(name="status")
-	private Status status;
+	private BookingStatus status;
 	
 	//store list of hours indicating booked slots for meeting
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -215,11 +215,11 @@ public class Booking {
 		this.duration = duration;
 	}
 
-	public Status getStatus() {
+	public BookingStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(BookingStatus status) {
 		this.status = status;
 	}
 

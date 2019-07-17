@@ -32,8 +32,8 @@ public class BookingService {
 	}
 	
 	@Transactional
-	public void addBooking(Booking b) {
-		bookingDao.addBooking(b);
+	public void addBooking(Booking b, String role) {
+		bookingDao.addBooking(b, role);
 	}
 	
 	@Transactional
@@ -42,8 +42,8 @@ public class BookingService {
 	}
 
 	@Transactional
-	public void updateBooking(Booking b) {
-		bookingDao.updateBooking(b);
+	public void updateBooking(Booking b, String role) {
+		bookingDao.updateBooking(b, role);
 	}
 	
 

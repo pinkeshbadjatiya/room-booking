@@ -10,8 +10,8 @@ public interface BookingDao {
 
 	List<Booking> getBookings();
 	Booking getBooking(int id);
-	void addBooking(Booking b);
-	void updateBooking(Booking b);
+	void addBooking(Booking b, String role);
+	void updateBooking(Booking b, String role);
 	void deleteBooking(Booking b);
 	List<Integer> getRoomAvailability(int roomId, Date startDate, Date endDate);
 	Booking getPrice(int id);

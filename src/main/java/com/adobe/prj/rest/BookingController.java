@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.BookedItem.BookedItemId;
 import com.adobe.prj.entity.Booking;
+import com.adobe.prj.entity.User;
 import com.adobe.prj.service.BookedItemService;
 import com.adobe.prj.service.BookingService;
 import com.adobe.prj.service.UserService;
@@ -51,15 +52,15 @@ public class BookingController {
 	
 	@RequestMapping(value="bookings", method=RequestMethod.POST)
 	public ResponseEntity<Booking> addBooking(HttpServletRequest request,@RequestBody Booking b) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
-		bookingService.addBooking(b);
+		User u = userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
+		bookingService.addBooking(b, u.getRole());
 		return new ResponseEntity<>(b, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value="bookings", method=RequestMethod.PUT)
 	public ResponseEntity<Booking> updateBooking(HttpServletRequest request,@RequestBody Booking b) {
-		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
-		bookingService.updateBooking(b);
+		User u = userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin","user"}));
+		bookingService.updateBooking(b, u.getRole());
 		return new ResponseEntity<>(b, HttpStatus.ACCEPTED);
 	}
 	

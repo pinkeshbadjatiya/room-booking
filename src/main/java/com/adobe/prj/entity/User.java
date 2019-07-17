@@ -60,7 +60,7 @@ public class User {
 	}
 
 	public void setName(String name) {
-		name = name;
+		this.name = name;
 	}
 
 	@JsonIgnore
@@ -70,7 +70,7 @@ public class User {
 
 	@JsonProperty
 	public void setPassword(String password) {
-		password = password;
+		this.password = password;
 	}
 
 	public String getRole() {
@@ -78,7 +78,7 @@ public class User {
 	}
 
 	public void setRole(String role) {
-		role = role;
+		this.role = role;
 	}
 
 	public String getPhone() {
@@ -86,7 +86,7 @@ public class User {
 	}
 
 	public void setPhone(String phone) {
-		phone = phone;
+		this.phone = phone;
 	}
 
 	public String getStatus() {
@@ -94,7 +94,7 @@ public class User {
 	}
 
 	public void setStatus(String status) {
-		status = status;
+		this.status = status;
 	}
 
 	
