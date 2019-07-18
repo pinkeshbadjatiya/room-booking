@@ -62,45 +62,30 @@ public class BookedItemDaoJpaImpl implements BookedItemDao {
 	@Transactional
 	public Boolean getItemAvailability(BookedItemId booked_item, List<Integer> booked_qty) {
 
-		String JPQL = "SELECT bi FROM BookedItem bi where bi.id=:booked_item";
-		TypedQuery<BookedItem> query = em.createQuery(JPQL, BookedItem.class);
-		query.setParameter("booked_item", booked_item);
-		BookedItem booked_item1 = query.getResultList().get(0);
-		if (booked_item1 == null) {
-			throw new InvalidId("No item found. Please check the Id given for the item.");
-		}
-
-		// Query query = em.createQuery(JPQL1).setParameter("roomId", roomId);
-		// List<Integer> entry = query.getResultList();
-
-		else {
-			int countsofar = 0;
-			for (int i = booked_qty.get(0); i <= booked_qty.get(1); i++) {
-				countsofar += booked_item1.getBooked_qty().get(i);
-			}
-
-			if (countsofar > 10)
-				return false;
-
-			return true;
-		}
+//		String JPQL = "SELECT bi FROM BookedItem bi where bi.id=:booked_item";
+//		TypedQuery<BookedItem> query = em.createQuery(JPQL, BookedItem.class);
+//		query.setParameter("booked_item", booked_item);
+//		BookedItem booked_item1 = query.getResultList().get(0);
+//		if (booked_item1 == null) {
+//			throw new InvalidId("No item found. Please check the Id given for the item.");
+//		}
+//
+//		// Query query = em.createQuery(JPQL1).setParameter("roomId", roomId);
+//		// List<Integer> entry = query.getResultList();
+//
+//		else {
+//			int countsofar = 0;
+//			for (int i = booked_qty.get(0); i <= booked_qty.get(1); i++) {
+//				countsofar += booked_item1.getBooked_qty().get(i);
+//			}
+//
+//			if (countsofar > 10)
+//				return false;
+//
+//			return true;
+//		}
+		return true;
 	}
-
-	// public List<List<Integer>> getAvailability(int roomId) {
-	// List<List<Integer>> ans = new ArrayList<List<Integer>>();
-	//
-	// List<Booking> bookRows = getBookRoom(roomId);
-	// for (Booking b : bookRows) {
-	// int bookId = b.getId();
-	// String JPQL2 = "SELECT l FROM Booking b JOIN b.hourList l where
-	// b.id=:bookId";
-	// Query query2 = em.createQuery(JPQL2).setParameter("bookId", bookId);
-	// List<Integer> hrList = query2.getResultList();
-	// ans.add(hrList);
-	// }
-	//
-	// return ans;
-	// }
 
 	@Override
 	@Transactional

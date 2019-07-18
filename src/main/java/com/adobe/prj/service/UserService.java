@@ -12,6 +12,7 @@ import com.adobe.prj.dao.UserDao;
 import com.adobe.prj.entity.User;
 import com.adobe.prj.exceptions.InvalidId;
 import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
+import com.adobe.prj.exceptions.NotAuthorized;
 import com.adobe.prj.utils.AuthRoles;
 
 @Service
@@ -83,8 +84,8 @@ public class UserService {
 		System.out.println(user);
 		if (!roles.isAuthorized(user.getRole()) && !roles.isAuthorized("*")) {
 			System.out.println("Not allowed");
-			// TODO: Error, Not allowed
-			throw new InvalidParameterOrMissingValue("Not allowed");
+			// Error: Not allowed
+			throw new NotAuthorized("Not allowed");
 		}
 		return user;
 	}

@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.adobe.prj.entity.Layout;
-import com.adobe.prj.entity.User;
 import com.adobe.prj.service.LayoutService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.utils.AuthRoles;

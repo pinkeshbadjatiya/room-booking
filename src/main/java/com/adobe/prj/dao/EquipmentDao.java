@@ -4,10 +4,8 @@ import java.util.List;
 
 import com.adobe.prj.entity.Equipment;
 
+// interface for equipment data access operations
 public interface EquipmentDao {
-	// void addProduct(Product p);
-	// List<Product> getProducts();
-	// Product getProduct(int id);
 	List<Equipment> getEquipments();
 
 	Equipment getEquipment(int id);
@@ -17,5 +15,5 @@ public interface EquipmentDao {
 	void updateEquipment(Equipment e);
 
 	void deleteEquipment(Equipment e);
-	
+
 }

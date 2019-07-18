@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.adobe.prj.entity.FoodDrink;
 import com.adobe.prj.exceptions.InvalidParameterOrMissingValue;
 
-@Repository // All 'Dao' classes should have repository
+@Repository // All 'DAO' classes should have repository
 public class FoodDrinkDaoJpaImpl implements FoodDrinkDao {
 
 	@PersistenceContext
@@ -63,7 +63,7 @@ public class FoodDrinkDaoJpaImpl implements FoodDrinkDao {
 
 	@Override
 	@Transactional // Ensures the whole function gets executed in an atomic
-					// fashion. If not, then it rollsback the whole operation.
+					// fashion. If not, then it rolls back the whole operation.
 	public void addFoodDrink(FoodDrink fd) {
 		em.persist(fd);
 	}

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -50,18 +51,15 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 				HttpStatus.BAD_REQUEST);
 	}
 
-	// protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest
-	// request) {
-	// String error = "Invalid API Key";
-	// return handleExceptionInternal(ex, generateJSON(error,
-	// HttpStatus.BAD_REQUEST), new HttpHeaders(), HttpStatus.BAD_REQUEST,
-	// request);
-	// }
+	protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
+		return new ResponseEntity<>(generateJSON("Invalid API_KEY", ex.getMessage(),
+				HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);
+	 }
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ Exception.class, NullPointerException.class })
 	public ResponseEntity<String> handle_generic(Exception e) {
-		return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later"+e.getMessage(), e.getMessage(),
+		return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later", e.getMessage(),
 				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
