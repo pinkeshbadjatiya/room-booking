@@ -29,12 +29,6 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 		return obj.toString();
 	}
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ InvalidAPIKey.class })
-	public ResponseEntity<String> handle1(Exception e) {
-		return new ResponseEntity<>(generateJSON(InvalidAPIKey.message, e.getMessage(), HttpStatus.BAD_REQUEST),
-				HttpStatus.BAD_REQUEST);
-	}
 
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	@ExceptionHandler({ NotAuthorized.class })
