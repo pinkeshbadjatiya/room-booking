@@ -6,7 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -14,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -30,7 +28,6 @@ public class Token {
 	
 	@Column(name="api_key")
 	private String apiKey;
-	//= RandomStringUtils.random(32, 0, 20, true, true, "qw32rfHIJk9iQ8Ud7h0X".toCharArray());
 	
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(unique = true)

@@ -71,7 +71,7 @@ public class RoomDaoJpaImpl implements RoomDao {
 	@Transactional
 	public void deleteRoom(Room r) {
 		Room _r = em.find(Room.class, r.getId());
-		if (r == null) {
+		if (_r == null) {
 			throw new InvalidParameterOrMissingValue("No room with the given id found. Hence, deletion not possible.");
 		}
 		em.remove(_r);

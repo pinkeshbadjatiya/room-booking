@@ -6,15 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.TokenDao;
-import com.adobe.prj.dao.UserDao;
 import com.adobe.prj.entity.Token;
 import com.adobe.prj.entity.User;
 
 @Service
 public class TokenService {
-
-	@Autowired
-	private UserDao userDao;
 	
 	@Autowired
 	private TokenDao tokenDao;

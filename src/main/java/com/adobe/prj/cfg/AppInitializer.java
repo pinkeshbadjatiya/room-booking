@@ -8,14 +8,12 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 public class AppInitializer implements WebApplicationInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext)
 			throws ServletException {
-//		servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy("springSecurityFilterChain")).addMappingForUrlPatterns(null, false, "/*");
 		WebApplicationContext context = getContext();
 		servletContext.addListener(new ContextLoaderListener(context));
 		ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
@@ -31,27 +29,3 @@ public class AppInitializer implements WebApplicationInitializer {
 		return context;
 	}
 }
-
-
-
-//package com.adobe.prj.cfg;
-//
-//import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-//
-//public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-// 
-//   @Override
-//   protected Class<?>[] getRootConfigClasses() {
-//      return new Class[] { SecurityConfig.class };
-//   }
-// 
-//   @Override
-//   protected Class<?>[] getServletConfigClasses() {
-//      return new Class[] { WebConfig.class };
-//   }
-// 
-//   @Override
-//   protected String[] getServletMappings() {
-//      return new String[] { "/" };
-//   }
-//}

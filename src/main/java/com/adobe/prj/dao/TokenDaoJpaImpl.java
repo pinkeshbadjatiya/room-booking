@@ -57,16 +57,6 @@ public class TokenDaoJpaImpl implements TokenDao {
 
 	@Override
 	public void deleteToken(String api_key) {
-		// String JPQL = "SELECT tok FROM Token tok where tok.apiKey=:api_key";
-		// List<Token> query_results = em.createQuery(JPQL,
-		// Token.class).getResultList();
-		// if (query_results.size() <= 0) {
-		// // TODO: Error, invalid token
-		// } else if (query_results.size() > 1) {
-		// // TODO: Error, found multiple tokens
-		// }
-		// em.remove(query_results.get(0));
-		// return query_results.get(0);
 		Token token = em.find(Token.class, api_key);
 		if (token == null) {
 			throw new InvalidParameterOrMissingValue(

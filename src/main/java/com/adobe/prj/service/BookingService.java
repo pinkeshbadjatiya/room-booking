@@ -8,20 +8,17 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.adobe.prj.dao.BookedItemDao;
 import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.entity.Booking;
-import com.adobe.prj.entity.BookedItem.BookedItemId;
-
 //service class for booking entity
 @Service
 public class BookingService {
 
 	@Autowired
 	private BookingDao bookingDao;
-	@Autowired
-	private BookedItemDao bookedItemDao;
-	
+//	@Autowired
+//	private BookedItemDao bookedItemDao;
+//	
 	public Booking getBooking(int id) {
 		//System.out.println(id);
 		return bookingDao.getBooking(id);

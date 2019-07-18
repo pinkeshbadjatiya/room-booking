@@ -16,18 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.User;
-import com.adobe.prj.exceptions.InvalidAPIKey;
 import com.adobe.prj.exceptions.NotAuthorized;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.utils.AuthRoles;  
-  
-//@Retention(RetentionPolicy.RUNTIME)  
-//@Target(ElementType.METHOD)  
-//@interface AllowedRoles{  
-//	String[] value() default{};  
-//}
-//@AllowedRoles({"admin", "user"}) 
-
 
 @CrossOrigin(maxAge = 3600)
 @RestController

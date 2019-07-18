@@ -143,11 +143,6 @@ public class Booking {
 
 
 	public void setHourList(List<Integer> hourList) {
-//		if(hourList.size()<15) {
-//			for(int i=hourList.size()-1;i<15;i++) {
-//				hourList.add(i,0);
-//			}
-//		}
 		this.hourList = hourList;
 	}
 	
