@@ -65,7 +65,9 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 //		return new ResponseEntity<>(generateJSON(InvalidDeletion.message, e.getMessage(), HttpStatus.BAD_REQUEST),
 //				HttpStatus.BAD_REQUEST);
 //	}
-
+//
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler({ InvalidAPIKey.class })
 	protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
 		return new ResponseEntity<>(generateJSON("Invalid API_KEY", ex.getMessage(),
 				HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);

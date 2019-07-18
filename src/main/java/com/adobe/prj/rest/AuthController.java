@@ -30,6 +30,7 @@ public class AuthController {
 	@RequestMapping(value="auth/login", method=RequestMethod.POST)
 	public ResponseEntity<Token> loginUser(@RequestBody User u) {
 		if (!userService.isValidUser(u)) {
+			
 			throw new InvalidParameterOrMissingValue("invalid password");
 		}
 		User ref_user = userService.getUserByEmail(u.getEmail());

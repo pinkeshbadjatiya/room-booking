@@ -34,6 +34,12 @@ public class User {
 	@Column(name="status")
 	private String status;
 
+	@Override
+	public String toString() {
+		return "User [email=" + email + ", name=" + name + ", password=" + password + ", role=" + role + ", phone="
+				+ phone + ", status=" + status + ", registrationDate=" + registrationDate + "]";
+	}
+
 	@Column(name="registration_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date registrationDate = new Date();

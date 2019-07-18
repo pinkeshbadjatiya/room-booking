@@ -39,11 +39,14 @@ public class UserService {
 	public Boolean isValidUser(User u) {
 		System.out.println(u);
 		User ref_user = userDao.getUserByEmail(u.getEmail());
+		System.out.println(ref_user);
 		if (ref_user == null) {
 			System.out.println("NULL USER");
 			return false;
 		}
-		if (ref_user.getPassword() != u.getPassword()) {
+		if (!ref_user.getPassword().equals(u.getPassword())) {
+			System.out.println(ref_user.getPassword());
+			System.out.println(u.getPassword());
 			return false;
 		}
 		return true;

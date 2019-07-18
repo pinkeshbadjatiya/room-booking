@@ -89,12 +89,16 @@ public class BookingDaoJpaImpl implements BookingDao {
 	@Transactional
 	public void updateBooking(Booking b, String role) {
 		Booking _b = em.find(Booking.class, b.getId());
-		
-		
+		if(_b==null){
+			throw new InvalidParameterOrMissingValue("Incorrect booking id");
+		}
+		System.out.println(b);
+		System.out.println(_b);
 		// Process data for consistency
 		if (b.getEndDate() == null) {
 			b.setEndDate(b.getStartDate());
 		}
+		System.out.println(b.getEndDate());
 		if(b.getDuration()!=null && b.getDuration().equalsIgnoreCase("full day") && b.getEndDate().equals(b.getStartDate())) {
 			List<Integer> ans = new ArrayList<>();
 			for(int i=0;i<15;i++) {
@@ -102,6 +106,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 			}
 			b.setHourList(ans);
 		}
+		System.out.println(b.getHourList());
 		if(b.getHourList().size()==0) {
 			List<Integer> ans = new ArrayList<>();
 			for(int i=0;i<15;i++) {
@@ -172,10 +177,10 @@ public class BookingDaoJpaImpl implements BookingDao {
 		}
 
 		if (b.getStatus() != null) {
-			if (role == "user")
+			if (role.equalsIgnoreCase("user"))
 				throw new NotAuthorized("Not authorized to set Status");
 			_b.setStatus(b.getStatus());
-		} else if (role == "user") {
+		} else if (role.equalsIgnoreCase("user")) {
 			_b.setStatus(BookingStatus.PENDING);
 		}
 
@@ -377,7 +382,9 @@ public class BookingDaoJpaImpl implements BookingDao {
 			List<Integer> hourList = b.getHourList();
 			int totalHours = 0;
 			for (int hour : hourList) {
-				totalHours += hour;
+				if(hour==0){
+					totalHours+=1;
+				}
 			}
 			double roomPrice = 0.00;
 			List<String> bookTypes = b.getRoom().getBookTypes();
@@ -410,16 +417,19 @@ public class BookingDaoJpaImpl implements BookingDao {
 			int numDays = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
 			subTotal += (roomPrice * numDays);
 		} else if (b.getDuration().equalsIgnoreCase("Full day")) {
+			System.out.println("full day");
 			// calculate price for full day booking
 			double roomPrice = 0.00;
 			List<String> bookTypes = b.getRoom().getBookTypes();
+			System.out.println(bookTypes);
 			for (int i = 0; i < bookTypes.size(); i++) {
-				if (bookTypes.get(i).equalsIgnoreCase("Full day")) {
-					roomPrice = b.getRoom().getBookTypesPrice().get(i);
-				}
+			if (bookTypes.get(i).equalsIgnoreCase("Full day")) {
+				roomPrice = b.getRoom().getBookTypesPrice().get(i);
 			}
+		}
 			subTotal += roomPrice;
 		}
+		System.out.println(subTotal);
 		b.setSubTotal(subTotal);
 		double tax = 0.1 * subTotal;
 		b.setTax(tax);
