@@ -70,9 +70,10 @@ public class BookingController {
 		return new ResponseEntity<>(b, HttpStatus.ACCEPTED);
 	}
 	
-	@RequestMapping(value="bookings", method=RequestMethod.DELETE)
-	public ResponseEntity<Booking> deleteBooking(HttpServletRequest request,@RequestBody Booking b) {
+	@RequestMapping(value="bookings/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Booking> deleteBooking(HttpServletRequest request, @PathVariable("id") int id) {
 		userService.authenticateUserByAPIKeyAndRole(request, new AuthRoles(new String[]{"admin"}));
+		Booking b = bookingService.getBooking(id);
 		bookingService.deleteBooking(b);
 		return new ResponseEntity<>(b, HttpStatus.OK);
 	}
@@ -83,10 +84,10 @@ public class BookingController {
 		return bookingService.getRoomAvailability(b.getRoom().getId(), b.getStartDate(), b.getEndDate());
 	}
 
-	@RequestMapping(value = "bookings/getItemAvailability", method = RequestMethod.GET)
-	public @ResponseBody Boolean getItemAvailability(@RequestBody BookedItemId bitem, List<Integer> booked_duration) {
-		return bookedItemService.getItemAvailability(bitem, booked_duration);
-	}	
+//	@RequestMapping(value = "bookings/getItemAvailability", method = RequestMethod.GET)
+//	public @ResponseBody Boolean getItemAvailability(@RequestBody BookedItemId bitem, List<Integer> booked_duration) {
+//		return bookedItemService.getItemAvailability(bitem, booked_duration);
+//	}	
 	
 	@RequestMapping(value="bookings/computePrice/{id}", method=RequestMethod.GET)
 	public @ResponseBody Booking getPrice(HttpServletRequest request,@PathVariable("id") int id) {

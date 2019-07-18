@@ -1,15 +1,21 @@
 package com.adobe.prj.exceptions;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+
+import javax.persistence.PersistenceException;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.json.simple.JSONObject;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.mysql.cj.jdbc.exceptions.SQLError;
 
 @ControllerAdvice
 public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
@@ -42,13 +48,22 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(generateJSON(InvalidId.message, e.getMessage(), HttpStatus.BAD_REQUEST),
 				HttpStatus.BAD_REQUEST);
 	}
-	
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ ConstraintViolationException.class, SQLException.class })
-	public ResponseEntity<String> handle4(Exception e) {
+	@ExceptionHandler({DataIntegrityViolationException.class, SQLException.class, SQLIntegrityConstraintViolationException.class, ConstraintViolationException.class, PersistenceException.class})
+	public ResponseEntity<String> handle4(SQLException e) {
+		System.out.println(e.getErrorCode());
+		System.out.println(e.getMessage());
 		return new ResponseEntity<>(generateJSON(InvalidDeletion.message, e.getMessage(), HttpStatus.BAD_REQUEST),
 				HttpStatus.BAD_REQUEST);
 	}
+	
+//	@ResponseStatus(HttpStatus.BAD_REQUEST)
+//	@ExceptionHandler({ })
+//	public ResponseEntity<String> handle5(Exception e) {
+//		return new ResponseEntity<>(generateJSON(InvalidDeletion.message, e.getMessage(), HttpStatus.BAD_REQUEST),
+//				HttpStatus.BAD_REQUEST);
+//	}
 
 	// protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest
 	// request) {
@@ -61,8 +76,10 @@ public class ServiceErrorAdvice extends ResponseEntityExceptionHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ Exception.class, NullPointerException.class })
 	public ResponseEntity<String> handle_generic(Exception e) {
-		return new ResponseEntity<>(generateJSON("Something went wrong at the BACKend, try again later"+e.getMessage(), e.getMessage(),
-				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(
+				generateJSON("Something went wrong at the BACKend, try again later", e.getMessage(),
+						HttpStatus.INTERNAL_SERVER_ERROR),
+				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

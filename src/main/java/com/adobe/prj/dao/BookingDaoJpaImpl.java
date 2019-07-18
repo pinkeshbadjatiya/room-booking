@@ -87,6 +87,29 @@ public class BookingDaoJpaImpl implements BookingDao {
 	@Transactional
 	public void updateBooking(Booking b, String role) {
 		Booking _b = em.find(Booking.class, b.getId());
+		
+		
+		// Process data for consistency
+		if (b.getEndDate() == null) {
+			b.setEndDate(b.getStartDate());
+		}
+		if(b.getDuration()!=null && b.getDuration().equalsIgnoreCase("full day") && b.getEndDate().equals(b.getStartDate())) {
+			List<Integer> ans = new ArrayList<>();
+			for(int i=0;i<15;i++) {
+				ans.add(i,0);
+			}
+			b.setHourList(ans);
+		}
+		if(b.getHourList().size()==0) {
+			List<Integer> ans = new ArrayList<>();
+			for(int i=0;i<15;i++) {
+				ans.add(i,1);
+			}
+			b.setHourList(ans);
+		}
+		
+		
+		
 		if (b.getId() != 0) {
 			_b.setId(b.getId());
 		}
