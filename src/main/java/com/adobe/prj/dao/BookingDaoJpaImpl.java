@@ -177,7 +177,7 @@ public class BookingDaoJpaImpl implements BookingDao {
 		}
 
 		if (b.getStatus() != null) {
-			if (role.equalsIgnoreCase("user"))
+			if ((b.getStatus() != _b.getStatus()) && role.equalsIgnoreCase("user"))
 				throw new NotAuthorized("Not authorized to set Status");
 			_b.setStatus(b.getStatus());
 		} else if (role.equalsIgnoreCase("user")) {
